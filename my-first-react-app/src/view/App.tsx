@@ -1,9 +1,14 @@
 import { Component, ReactNode } from 'react';
 import Search from './search/Search';
-import Results from './results/results';
+import Results from './results/Results';
 class App extends Component {
+  getStartValue = (): string => {
+    const localValue = localStorage.getItem('inputValue');
+    return localValue ? JSON.parse(localValue) : '';
+  };
+
   state: Readonly<{ name: string }> = {
-    name: '',
+    name: this.getStartValue(),
   };
 
   updateInputValue = (value: string) => {
