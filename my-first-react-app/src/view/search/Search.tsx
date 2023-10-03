@@ -1,6 +1,8 @@
 import { ChangeEvent, Component, ReactNode } from 'react';
 
 class Search extends Component {
+  declare props: Readonly<{ updateInputValue: (value: string) => void }>;
+
   handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
   };
@@ -15,14 +17,18 @@ class Search extends Component {
   };
   handleSubmit = () => {};
   render(): ReactNode {
+    const inputValue = this.getInputValue();
     return (
       <section className="search">
         <input
           className="search__input"
-          placeholder={this.getInputValue()}
+          placeholder={inputValue}
           onChange={this.handleInputChange}
         ></input>
-        <button className="search__btn" type="submit" onSubmit={this.handleSubmit}></button>
+        <button
+          className="search__btn"
+          onClick={() => this.props.updateInputValue(inputValue)}
+        ></button>
       </section>
     );
   }

@@ -26,5 +26,15 @@ class Results extends Component {
       results: results,
     });
   }
+
+  async componentDidUpdate(prevProps: Readonly<{ searchValue: string }>): Promise<void> {
+    if (prevProps.searchValue !== this.props.searchValue) {
+      const searchData = await searchRequest(this.props.searchValue);
+      const results = searchData.results;
+      this.setState({
+        results: results,
+      });
+    }
+  }
 }
 export default Results;
