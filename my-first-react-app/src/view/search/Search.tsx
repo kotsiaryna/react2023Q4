@@ -9,13 +9,9 @@ class Search extends Component {
 
   getInputValue = () => {
     const localValue = localStorage.getItem('inputValue');
-    if (localValue) {
-      return JSON.parse(localValue);
-    } else {
-      return '';
-    }
+    return localValue ? JSON.parse(localValue) : '';
   };
-  handleSubmit = () => {};
+
   render(): ReactNode {
     const inputValue = this.getInputValue();
     return (
@@ -25,10 +21,9 @@ class Search extends Component {
           placeholder={inputValue}
           onChange={this.handleInputChange}
         ></input>
-        <button
-          className="search__btn"
-          onClick={() => this.props.updateInputValue(inputValue)}
-        ></button>
+        <button className="search__btn" onClick={() => this.props.updateInputValue(inputValue)}>
+          Search
+        </button>
       </section>
     );
   }
