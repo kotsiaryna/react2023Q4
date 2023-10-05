@@ -23,6 +23,7 @@ class Search extends Component {
     const inputValue = this.getInputValue();
     return (
       <section className="search">
+        <h1 className="search__heading">Looking for a starship?</h1>
         <input
           className="search__input"
           placeholder={inputValue}
