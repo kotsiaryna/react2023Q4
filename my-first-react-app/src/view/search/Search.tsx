@@ -2,9 +2,16 @@ import { ChangeEvent, Component, ReactNode } from 'react';
 
 class Search extends Component {
   declare props: Readonly<{ updateInputValue: (value: string) => void }>;
+  input: string;
+
+  constructor(props: Readonly<{ updateInputValue: (value: string) => void }>) {
+    super(props);
+    this.input = '';
+  }
 
   handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
+    this.input = e.target.value;
   };
 
   getInputValue = () => {
@@ -19,9 +26,14 @@ class Search extends Component {
         <input
           className="search__input"
           placeholder={inputValue}
-          onChange={this.handleInputChange}
+          onInput={this.handleInputChange}
         ></input>
-        <button className="search__btn" onClick={() => this.props.updateInputValue(inputValue)}>
+        <button
+          className="search__btn"
+          onClick={() => {
+            this.props.updateInputValue(this.input);
+          }}
+        >
           Search
         </button>
       </section>
