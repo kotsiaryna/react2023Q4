@@ -32,14 +32,15 @@ class Results extends Component {
         );
       });
     } else {
-      return <div>No matches</div>;
+      return <div className="results__no-results">No matches</div>;
     }
   };
 
   render() {
     return (
       <section className="results">
-        {this.state.isLoading && <p>Loading...</p>}
+        <div className="results__bg"></div>
+        {this.state.isLoading && <p className="results__preload">Loading...</p>}
         {this.showContent(this.state.results)}
       </section>
     );

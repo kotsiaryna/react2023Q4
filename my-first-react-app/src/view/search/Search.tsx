@@ -24,19 +24,22 @@ class Search extends Component {
     return (
       <section className="search">
         <h1 className="search__heading">Looking for a starship?</h1>
-        <input
-          className="search__input"
-          placeholder={inputValue}
-          onInput={this.handleInputChange}
-        ></input>
-        <button
-          className="search__btn"
-          onClick={() => {
-            this.props.updateInputValue(this.input);
-          }}
-        >
-          Search
-        </button>
+        <div className="search__block">
+          <input
+            type="text"
+            className="search__input"
+            placeholder={inputValue}
+            onInput={this.handleInputChange}
+          ></input>
+          <button
+            className="search__btn"
+            onClick={() => {
+              this.props.updateInputValue(this.input);
+            }}
+          >
+            Search
+          </button>
+        </div>
       </section>
     );
   }
