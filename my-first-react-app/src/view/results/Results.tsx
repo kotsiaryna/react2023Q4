@@ -8,9 +8,8 @@ class Results extends Component {
 
   state: Readonly<{ results: ResultsData[] | null; isLoading: boolean }>;
 
-  constructor(props: object) {
+  constructor(props: { searchValue: string }) {
     super(props);
-    // this.state = { results: [{ name: '', model: '', length: '' }], isLoading: false };
     this.state = { results: null, isLoading: false };
   }
 
@@ -27,8 +26,6 @@ class Results extends Component {
   };
 
   render() {
-    // console.log('render()');
-    console.log('rendering Results');
     return (
       <section className="results">
         {this.state.isLoading && <p>Loading...</p>}
@@ -38,7 +35,6 @@ class Results extends Component {
   }
 
   getData = async () => {
-    // console.log('getting data...');
     this.setState({
       isLoading: true,
       results: null,
@@ -52,12 +48,10 @@ class Results extends Component {
   };
 
   async componentDidMount(): Promise<void> {
-    // console.log('didMount');
     await this.getData();
   }
 
   async componentDidUpdate(prevProps: Readonly<{ searchValue: string }>): Promise<void> {
-    // console.log('didUpdate');
     if (prevProps.searchValue !== this.props.searchValue) {
       await this.getData();
     }

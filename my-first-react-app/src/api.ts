@@ -6,6 +6,5 @@ export const searchRequest = async (searchValue: string): Promise<{ results: Res
   const url = `${BaseURL}?search=${searchValue}`;
   const resp = await fetch(url);
   const result = await resp.json();
-  console.log(result);
   return result;
 };
