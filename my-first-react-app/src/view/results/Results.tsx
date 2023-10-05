@@ -27,7 +27,7 @@ class Results extends Component {
             length={length}
             manufacturer={manufacturer}
             starship_class={starship_class}
-            cost={cost_in_credits}
+            cost_in_credits={cost_in_credits}
           />
         );
       });
