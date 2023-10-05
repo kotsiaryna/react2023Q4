@@ -1,24 +1,35 @@
 import { Component } from 'react';
 import { searchRequest } from '../../api';
-import { ResultsData } from '../../types';
+import { IShip } from '../../types';
 import Ship from './Ship';
 
 class Results extends Component {
   declare props: { searchValue: string };
 
-  state: Readonly<{ results: ResultsData[] | null; isLoading: boolean }>;
+  state: Readonly<{ results: IShip[] | null; isLoading: boolean }>;
 
   constructor(props: { searchValue: string }) {
     super(props);
     this.state = { results: null, isLoading: false };
   }
 
-  showContent = (results: ResultsData[] | null) => {
+  showContent = (results: IShip[] | null) => {
     if (!results) return;
 
     if (results.length) {
       return results.map((res, i) => {
-        return <Ship key={i} name={res.name} model={res.model} length={res.length} />;
+        const { name, model, length, manufacturer, starship_class, cost_in_credits } = res;
+        return (
+          <Ship
+            key={i}
+            name={name}
+            model={model}
+            length={length}
+            manufacturer={manufacturer}
+            starship_class={starship_class}
+            cost={cost_in_credits}
+          />
+        );
       });
     } else {
       return <div>No matches</div>;
