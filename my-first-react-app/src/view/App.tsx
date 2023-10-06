@@ -1,30 +1,27 @@
-import { Component, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import Search from './search/Search';
 import Results from './results/Results';
-class App extends Component {
-  state: Readonly<{ name: string }>;
-  constructor(props: object) {
-    super(props);
-    const localValue = localStorage.getItem('inputValue');
-    this.state = {
-      name: localValue ? JSON.parse(localValue) : '',
-    };
-  }
 
-  updateInputValue = (value: string) => {
-    this.setState({
-      name: value,
-    });
+const App = (): ReactNode => {
+  const getLocalStorageValue = () => {
+    const localValue = localStorage.getItem('inputValue');
+    return localValue ? JSON.parse(localValue) : '';
   };
 
-  render(): ReactNode {
-    return (
-      <>
-        <Search updateInputValue={this.updateInputValue} />
-        <Results searchValue={this.state.name} />
-      </>
-    );
-  }
-}
+  const [searchValue, setSearchValue] = useState(getLocalStorageValue());
+
+  const updateInputValue = (value: string) => {
+    console.log('inputvalue is updated');
+    console.log('value:' + value);
+    setSearchValue(value);
+  };
+
+  return (
+    <>
+      <Search updateInputValue={updateInputValue} />
+      <Results searchValue={searchValue} />
+    </>
+  );
+};
 
 export default App;

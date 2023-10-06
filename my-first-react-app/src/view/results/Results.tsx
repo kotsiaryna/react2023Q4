@@ -1,21 +1,18 @@
-import { Component } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { searchRequest } from '../../api';
 import { IShip } from '../../types';
 import Ship from './Ship';
 
-class Results extends Component {
-  declare props: { searchValue: string };
+type SearchValue = {
+  searchValue: string;
+};
 
-  state: Readonly<{ results: IShip[] | null; isLoading: boolean }>;
+const Results = (props: SearchValue): ReactNode => {
+  const [results, setResults] = useState<null | IShip[]>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  constructor(props: { searchValue: string }) {
-    super(props);
-    this.state = { results: null, isLoading: false };
-  }
-
-  showContent = (results: IShip[] | null) => {
-    if (!results) return;
-
+  const showContent = (results: IShip[]) => {
+    console.log(results);
     if (results.length) {
       return results.map((res, i) => {
         const { name, model, length, manufacturer, starship_class, cost_in_credits } = res;
@@ -36,37 +33,24 @@ class Results extends Component {
     }
   };
 
-  render() {
-    return (
-      <section className="results">
-        {!this.state.isLoading && <div className="results__bg"></div>}
-        {this.state.isLoading && <div className="results__preload"></div>}
-        {this.showContent(this.state.results)}
-      </section>
-    );
-  }
+  useEffect(() => {
+    const getData = async () => {
+      const response = await searchRequest(props.searchValue);
+      const results = response.results;
+      setResults(results);
+      setIsLoading(false);
+    };
+    setIsLoading(true);
+    setResults(null);
+    getData();
+  }, [props.searchValue]);
 
-  getData = async () => {
-    this.setState({
-      isLoading: true,
-      results: null,
-    });
-    const searchData = await searchRequest(this.props.searchValue);
-    const results = searchData.results;
-    this.setState({
-      results: results,
-      isLoading: false,
-    });
-  };
-
-  async componentDidMount(): Promise<void> {
-    await this.getData();
-  }
-
-  async componentDidUpdate(prevProps: Readonly<{ searchValue: string }>): Promise<void> {
-    if (prevProps.searchValue !== this.props.searchValue) {
-      await this.getData();
-    }
-  }
-}
+  return (
+    <section className="results">
+      {!isLoading && <div className="results__bg"></div>}
+      {isLoading && <div className="results__preload"></div>}
+      {results && showContent(results)}
+    </section>
+  );
+};
 export default Results;
