@@ -39,8 +39,8 @@ class Results extends Component {
   render() {
     return (
       <section className="results">
-        <div className="results__bg"></div>
-        {this.state.isLoading && <p className="results__preload">Loading...</p>}
+        {!this.state.isLoading && <div className="results__bg"></div>}
+        {this.state.isLoading && <div className="results__preload"></div>}
         {this.showContent(this.state.results)}
       </section>
     );

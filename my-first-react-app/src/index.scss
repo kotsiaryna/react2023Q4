@@ -59,6 +59,12 @@ body {
     color: $color-dark;
     letter-spacing: 0.1em;
     font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+      background-color: darken(#d1afa3, 20);
+      transition: 0.3s;
+    }
    }
 }
 
@@ -80,17 +86,29 @@ body {
     background-color: #a6b5ba;
     opacity: 0.4;
   }
+
+  &__preload {
+    width: 300px;
+    height: 100px;
+    background-image: url('./assets/preloader3.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &__no-results {
+    width: 700px;
+    font-size: 2em;
+    text-align: center;
+  }
   
   &__item {
     width: 700px;
     display: flex;
-    // gap: 10px;
     justify-content: space-between;
     padding: 15px;
 
     border: 0.1px solid white;
     z-index: 2;
-    
 
     .item__name {
       width: 150px;
