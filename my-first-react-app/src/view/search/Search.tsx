@@ -1,17 +1,17 @@
 import { ChangeEvent, ReactNode } from 'react';
 
 const Search = (props: { updateInputValue: (value: string) => void }): ReactNode => {
-  let input: string;
+  const getInputValue = () => {
+    const localValue = localStorage.getItem('inputValue');
+    return localValue ? JSON.parse(localValue) : '';
+  };
+
+  let input = getInputValue();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
     input = e.target.value;
     console.log(input);
-  };
-
-  const getInputValue = () => {
-    const localValue = localStorage.getItem('inputValue');
-    return localValue ? JSON.parse(localValue) : '';
   };
 
   return (
@@ -21,7 +21,7 @@ const Search = (props: { updateInputValue: (value: string) => void }): ReactNode
         <input
           type="text"
           className="search__input"
-          placeholder={getInputValue()}
+          placeholder={input}
           onInput={handleInputChange}
         ></input>
         <button
