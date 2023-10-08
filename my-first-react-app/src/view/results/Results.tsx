@@ -12,7 +12,6 @@ const Results = (props: SearchValue): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
 
   const showContent = (results: IShip[]) => {
-    console.log(results);
     if (results.length) {
       return results.map((res, i) => {
         const { name, model, length, manufacturer, starship_class, cost_in_credits } = res;

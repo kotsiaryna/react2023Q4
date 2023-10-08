@@ -11,8 +11,6 @@ const App = (): ReactNode => {
   const [searchValue, setSearchValue] = useState(getLocalStorageValue());
 
   const updateInputValue = (value: string) => {
-    console.log('inputvalue is updated');
-    console.log('value:' + value);
     setSearchValue(value);
   };
 
