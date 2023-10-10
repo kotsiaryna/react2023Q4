@@ -1,17 +1,22 @@
-import { ChangeEvent, ReactNode } from 'react';
+import { ChangeEvent, ReactNode, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-const Search = (props: { updateInputValue: (value: string) => void }): ReactNode => {
+const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
   const getInputValue = () => {
     const localValue = localStorage.getItem('inputValue');
     return localValue ? JSON.parse(localValue) : '';
   };
 
-  let input = getInputValue();
+  const [searchValue, setSearchValue] = useState(getInputValue());
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
-    input = e.target.value;
-    console.log(input);
+    setSearchValue(e.target.value);
+  };
+
+  const createLink = () => {
+    const link = `/${searchValue}/1`;
+    return link;
   };
 
   return (
@@ -21,17 +26,19 @@ const Search = (props: { updateInputValue: (value: string) => void }): ReactNode
         <input
           type="text"
           className="search__input"
-          placeholder={input}
+          placeholder={getInputValue()}
           onInput={handleInputChange}
         ></input>
-        <button
-          className="search__btn"
-          onClick={() => {
-            props.updateInputValue(input);
-          }}
-        >
-          Search
-        </button>
+        <NavLink to={createLink()}>
+          <button
+            className="search__btn"
+            onClick={() => {
+              props.handleClick(searchValue);
+            }}
+          >
+            Search
+          </button>
+        </NavLink>
       </div>
     </section>
   );

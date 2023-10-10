@@ -1,23 +1,19 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { searchRequest } from '../../api';
+import { ReactNode } from 'react';
 import { IShip } from '../../types';
 import Ship from './Ship';
+import { useLoaderData } from 'react-router-dom';
 
-type SearchValue = {
-  searchValue: string;
-};
-
-const Results = (props: SearchValue): ReactNode => {
-  const [results, setResults] = useState<null | IShip[]>(null);
-  const [isLoading, setIsLoading] = useState(true);
+const Results = (): ReactNode => {
+  const searchResults = useLoaderData() as IShip[];
+  console.log(searchResults);
 
   const showContent = (results: IShip[]) => {
     if (results.length) {
-      return results.map((res, i) => {
+      return results.map((res) => {
         const { name, model, length, manufacturer, starship_class, cost_in_credits } = res;
         return (
           <Ship
-            key={i}
+            key={model}
             name={name}
             model={model}
             length={length}
@@ -32,23 +28,10 @@ const Results = (props: SearchValue): ReactNode => {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await searchRequest(props.searchValue);
-      const results = response.results;
-      setResults(results);
-      setIsLoading(false);
-    };
-    setIsLoading(true);
-    setResults(null);
-    getData();
-  }, [props.searchValue]);
-
   return (
     <section className="results">
-      {!isLoading && <div className="results__bg"></div>}
-      {isLoading && <div className="results__preload"></div>}
-      {results && showContent(results)}
+      <div className="results__bg"></div>
+      {showContent(searchResults)}
     </section>
   );
 };

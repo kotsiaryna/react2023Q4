@@ -1,23 +1,25 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Search from './search/Search';
-import Results from './results/Results';
+import { Outlet, useParams } from 'react-router-dom';
 
 const App = (): ReactNode => {
-  const getLocalStorageValue = () => {
-    const localValue = localStorage.getItem('inputValue');
-    return localValue ? JSON.parse(localValue) : '';
+  const { search } = useParams();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const changeLoadingState = (value: string) => {
+    if (value !== search) setIsLoading(true); // check if search has changed
   };
 
-  const [searchValue, setSearchValue] = useState(getLocalStorageValue());
+  useEffect(() => {
+    setIsLoading(false);
+  }, [search]);
 
-  const updateInputValue = (value: string) => {
-    setSearchValue(value);
-  };
-
+  console.log(isLoading);
   return (
     <>
-      <Search updateInputValue={updateInputValue} />
-      <Results searchValue={searchValue} />
+      <Search handleClick={changeLoadingState} />
+      {isLoading ? <div className="results__preload"></div> : <Outlet />}
     </>
   );
 };
