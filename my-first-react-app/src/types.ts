@@ -5,4 +5,6 @@ export interface IShip {
   manufacturer: string;
   starship_class: string;
   cost_in_credits: string;
+  url: string;
+  handleClick: () => void;
 }

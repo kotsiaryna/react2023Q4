@@ -20,8 +20,14 @@ const App = (): ReactNode => {
   return (
     <>
       <Search handleClick={changeLoadingState} />
-      <Pagination handleClick={changeLoadingState} />
-      {isLoading ? <div className="results__preload"></div> : <Outlet />}
+
+      {isLoading ? (
+        <div className="results__preload"></div>
+      ) : (
+        <>
+          <Pagination handleClick={changeLoadingState} /> <Outlet />
+        </>
+      )}
     </>
   );
 };

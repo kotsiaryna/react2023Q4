@@ -14,3 +14,13 @@ export const searchRequest = async ({ params }: any): Promise<{ results: IShip[]
   const result = await resp.json();
   return result.results;
 };
+
+export const shipRequest = async ({ params }: any) => {
+  const url = `${BaseURL}/${params.id}`;
+  const resp = await fetch(url);
+  if (!resp.ok) {
+    throw new Error('error in getting details');
+  }
+  const result = await resp.json();
+  return result;
+};
