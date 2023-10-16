@@ -23,10 +23,12 @@ const App = (): ReactNode => {
 
       {isLoading ? (
         <div className="results__preload"></div>
-      ) : (
+      ) : page ? (
         <>
           <Pagination handleClick={changeLoadingState} /> <Outlet />
         </>
+      ) : (
+        ''
       )}
     </>
   );
