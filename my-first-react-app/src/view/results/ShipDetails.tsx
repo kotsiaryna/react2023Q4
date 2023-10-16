@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useLoaderData } from 'react-router-dom';
 
 function ShipDetails() {
@@ -12,11 +13,16 @@ function ShipDetails() {
       );
     });
   };
+  const { page, search } = useParams();
+
   return (
     <>
       <div className="results__details">
         ShipDetails
         <div>{showData()}</div>
+        <Link to={`/${search}/${page}`} className="closeBtn">
+          X
+        </Link>
       </div>
     </>
   );
