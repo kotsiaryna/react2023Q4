@@ -17,13 +17,10 @@ function ShipDetails() {
 
   return (
     <>
-      <div className="results__details">
-        ShipDetails
-        <div>{showData()}</div>
-        <Link to={`/${search}/${page}`} className="closeBtn">
-          X
-        </Link>
-      </div>
+      <div>{showData()}</div>
+      <Link to={`/${search}/${page}`} className="closeBtn">
+        X
+      </Link>
     </>
   );
 }

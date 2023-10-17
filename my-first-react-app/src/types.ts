@@ -8,3 +8,10 @@ export interface IShip {
   url: string;
   handleClick: () => void;
 }
+
+export type Response = {
+  count: number;
+  next: null | string;
+  previous: null | string;
+  results: IShip[];
+};

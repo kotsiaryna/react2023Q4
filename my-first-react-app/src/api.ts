@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { IShip } from './types';
+import { Response } from './types';
 
 const BaseURL = 'https://swapi.dev/api/starships/';
 
-export const searchRequest = async ({ params }: any): Promise<{ results: IShip[] }> => {
+export const searchRequest = async ({ params }: any): Promise<Response> => {
   const { page, search } = params;
   const url = `${BaseURL}?search=${search}&page=${page}`;
   const resp = await fetch(url);
@@ -12,7 +12,7 @@ export const searchRequest = async ({ params }: any): Promise<{ results: IShip[]
     throw new Error('error in fetch');
   }
   const result = await resp.json();
-  return result.results;
+  return result;
 };
 
 export const shipRequest = async ({ params }: any) => {

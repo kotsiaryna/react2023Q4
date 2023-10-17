@@ -1,22 +1,36 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { IShip } from '../../types';
+import { IShip, Response } from '../../types';
 import Ship from './Ship';
 import { Outlet, useLoaderData, useParams } from 'react-router-dom';
+import Pagination from './Pagination';
+import ChooseLimit from './ChooseLimit';
+import Loader from './Loader';
 
 const Results = (): ReactNode => {
-  const searchResults = useLoaderData() as IShip[];
-  console.log(searchResults);
+  const response = useLoaderData() as Response;
+  console.log(response);
+  const results = response.results;
 
-  const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const { id, page } = useParams();
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   useEffect(() => {
-    setIsLoading(false);
+    setIsLoadingDetails(false);
   }, [id]);
 
   const startLoading = () => {
-    setIsLoading(true);
+    setIsLoadingDetails(true);
   };
+
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+
+  const startLoadingResults = () => {
+    setIsLoadingResults(true);
+  };
+
+  useEffect(() => {
+    setIsLoadingResults(false);
+  }, [page]);
 
   const showContent = (results: IShip[]) => {
     if (results.length) {
@@ -44,8 +58,20 @@ const Results = (): ReactNode => {
   return (
     <section className="results">
       <div className="results__bg"></div>
-      <div className="results__items">{showContent(searchResults)} </div>
-      {isLoading ? <div className="results__preload"></div> : <Outlet />}
+      <ChooseLimit />
+      <Pagination
+        handleClick={startLoadingResults}
+        next={response.next}
+        previous={response.previous}
+      />
+      {isLoadingResults ? (
+        <Loader />
+      ) : (
+        <div className="results__items">{showContent(results)} </div>
+      )}
+      <div className="results__details">
+        {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}{' '}
+      </div>
     </section>
   );
 };
