@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import Search from './search/Search';
 import { Outlet, useParams } from 'react-router-dom';
 import Pagination from './results/Pagination';
+import ChooseLimit from './results/ChooseLimit';
 
 const App = (): ReactNode => {
   const { search, page } = useParams();
@@ -25,7 +26,9 @@ const App = (): ReactNode => {
         <div className="results__preload"></div>
       ) : page ? (
         <>
-          <Pagination handleClick={changeLoadingState} /> <Outlet />
+          <ChooseLimit />
+          <Pagination handleClick={changeLoadingState} />
+          <Outlet />
         </>
       ) : (
         ''

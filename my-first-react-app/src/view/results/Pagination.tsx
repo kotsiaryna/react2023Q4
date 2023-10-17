@@ -28,7 +28,7 @@ function Pagination(props: { handleClick: (value: string) => void }) {
       >
         BACK
       </Link>
-      <div className="pageNumber">{curPage}</div>
+      <div className="pageNumber">{page}</div>
       <Link
         to={`/${search}/${Number(page) + 1}`}
         onClick={(e) => {
