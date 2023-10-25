@@ -9,7 +9,7 @@
     "lint": "eslint src",
     "preview": "vite preview",
     "prepare": "cd .. && husky install my-first-react-app/husky",
-    "fix": "prettier --write"
+    "format:fix": "prettier --write"
   },
   "dependencies": {
     "react": "^18.2.0",
