@@ -4,12 +4,12 @@ import Results from './results/Results';
 import ErrorButton from './error/errorButton';
 
 class App extends Component {
-  state: Readonly<{ name: string; errorIsThrown: boolean }>;
+  state: Readonly<{ searchValue: string; errorIsThrown: boolean }>;
   constructor(props: object) {
     super(props);
     const localValue = localStorage.getItem('inputValue');
     this.state = {
-      name: localValue ? JSON.parse(localValue) : '',
+      searchValue: localValue ? JSON.parse(localValue) : '',
       errorIsThrown: false,
     };
   }
@@ -17,7 +17,7 @@ class App extends Component {
   updateInputValue = (value: string) => {
     this.setState({
       ...this.state,
-      name: value,
+      searchValue: value,
     });
   };
 
@@ -35,8 +35,11 @@ class App extends Component {
       return (
         <>
           <ErrorButton handleClick={this.throwError} />
-          <Search updateInputValue={this.updateInputValue} />
-          <Results searchValue={this.state.name} />
+          <Search
+            updateInputValue={this.updateInputValue}
+            inputPlaceholder={this.state.searchValue}
+          />
+          <Results searchValue={this.state.searchValue} />
         </>
       );
     }

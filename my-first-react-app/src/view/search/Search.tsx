@@ -1,26 +1,15 @@
-import { ChangeEvent, Component, ReactNode } from 'react';
+import { Component, ReactNode, RefObject, createRef } from 'react';
 
 class Search extends Component {
-  declare props: Readonly<{ updateInputValue: (value: string) => void }>;
-  input: string;
+  declare props: Readonly<{ updateInputValue: (value: string) => void; inputPlaceholder: string }>;
 
-  constructor(props: Readonly<{ updateInputValue: (value: string) => void }>) {
-    super(props);
-    this.input = '';
-  }
+  inputRef: RefObject<HTMLInputElement> = createRef();
 
-  handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('inputValue', JSON.stringify(e.target.value));
-    this.input = e.target.value;
-  };
-
-  getInputValue = () => {
-    const localValue = localStorage.getItem('inputValue');
-    return localValue ? JSON.parse(localValue) : '';
+  handleInputChange = () => {
+    localStorage.setItem('inputValue', JSON.stringify(this.inputRef.current?.value));
   };
 
   render(): ReactNode {
-    const inputValue = this.getInputValue();
     return (
       <section className="search">
         <h1 className="search__heading">Looking for a starship?</h1>
@@ -28,13 +17,14 @@ class Search extends Component {
           <input
             type="text"
             className="search__input"
-            placeholder={inputValue}
-            onInput={this.handleInputChange}
+            ref={this.inputRef}
+            placeholder={this.props.inputPlaceholder}
           ></input>
           <button
             className="search__btn"
             onClick={() => {
-              this.props.updateInputValue(this.input);
+              this.props.updateInputValue(this.inputRef.current?.value || '');
+              this.handleInputChange();
             }}
           >
             Search
