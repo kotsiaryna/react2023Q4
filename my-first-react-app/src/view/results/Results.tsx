@@ -6,17 +6,19 @@ import Ship from './Ship';
 class Results extends Component {
   declare props: { searchValue: string };
 
-  state: Readonly<{ results: IShip[] | null; isLoading: boolean }>;
+  state: Readonly<{ results: IShip[] | null | string; isLoading: boolean }>;
 
   constructor(props: { searchValue: string }) {
     super(props);
     this.state = { results: null, isLoading: false };
   }
 
-  showContent = (results: IShip[] | null) => {
+  showContent = (results: IShip[] | null | string) => {
     if (!results) return;
 
-    if (results.length) {
+    if (typeof results === 'string') {
+      return <div className="results__no-results">Something went wrong. Try again</div>;
+    } else if (results.length) {
       return results.map((res, i) => {
         const { name, model, length, manufacturer, starship_class, cost_in_credits } = res;
         return (
@@ -51,12 +53,16 @@ class Results extends Component {
       isLoading: true,
       results: null,
     });
-    const searchData = await searchRequest(this.props.searchValue);
-    const results = searchData.results;
-    this.setState({
-      results: results,
-      isLoading: false,
-    });
+    try {
+      const searchData = await searchRequest(this.props.searchValue);
+      const results = searchData.results;
+      this.setState({
+        results: results,
+        isLoading: false,
+      });
+    } catch {
+      this.setState({ results: 'error', isLoading: false });
+    }
   };
 
   async componentDidMount(): Promise<void> {
