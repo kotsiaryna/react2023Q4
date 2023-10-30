@@ -13,6 +13,7 @@ import { searchRequest, shipRequest } from './api';
 import ResultsError from './view/results/ResultsError';
 import Page404 from './view/notFound/Page404';
 import ShipDetails from './view/results/ShipDetails';
+import ErrorBoundary from './view/ErrorBoundary';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,8 @@ const router = createBrowserRouter(
 );
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   </React.StrictMode>
 );
