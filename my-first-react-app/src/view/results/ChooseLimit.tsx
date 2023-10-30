@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import './chooseLimit.scss';
 
 const ChooseLimit = () => {
   const { search } = useParams();

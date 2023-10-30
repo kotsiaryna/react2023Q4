@@ -6,6 +6,8 @@ import Pagination from './Pagination';
 import ChooseLimit from './ChooseLimit';
 import Loader from './Loader';
 
+import './results.scss';
+
 const Results = (): ReactNode => {
   const response = useLoaderData() as Response;
   console.log(response);

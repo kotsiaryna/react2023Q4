@@ -1,3 +1,5 @@
+import './errorPage.scss';
+
 const ErrorPage = () => {
   const reload = () => {
     window.location.reload();

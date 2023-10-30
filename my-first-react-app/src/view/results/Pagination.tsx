@@ -1,6 +1,8 @@
 import { MouseEventHandler, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import './pagination.scss';
+
 function Pagination({
   handleClick,
   next,

@@ -18,7 +18,7 @@ function ShipDetails() {
   return (
     <>
       <div>{showData()}</div>
-      <Link to={`/${search}/${page}`} className="closeBtn">
+      <Link to={`/${search}/${page}`} className="results__closeBtn">
         X
       </Link>
     </>

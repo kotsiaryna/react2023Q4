@@ -1,6 +1,8 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import './search.scss';
+
 const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
   const getInputValue = () => {
     const localValue = localStorage.getItem('inputValue');
