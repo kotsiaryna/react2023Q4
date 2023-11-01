@@ -9,11 +9,11 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import Results from './view/results/Results';
-import { searchRequest, shipRequest } from './api';
+import { articleRequest, searchRequest } from './api';
 import ResultsError from './view/results/ResultsError';
 import Page404 from './view/notFound/Page404';
-import ShipDetails from './view/results/ShipDetails';
 import ErrorBoundary from './view/ErrorBoundary';
+import ArticleDetails from './view/results/ArticleDetails';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +25,7 @@ const router = createBrowserRouter(
         loader={searchRequest}
         errorElement={<ResultsError />}
       >
-        <Route path=":id" element={<ShipDetails />} loader={shipRequest} />
+        <Route path=":id" element={<ArticleDetails />} loader={articleRequest} />
       </Route>
     </Route>
   )

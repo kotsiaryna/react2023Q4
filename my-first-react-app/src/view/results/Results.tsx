@@ -11,9 +11,11 @@ import ShowContent from './ShowContent';
 const Results = (): ReactNode => {
   const response = useLoaderData() as Response;
   console.log(response);
-  const results = response.results;
+  // const results = response.articles;
+  const { totalResults, articles } = response;
 
   const { id, page } = useParams();
+  const limit = 5; //TODO add limit to query
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   useEffect(() => {
@@ -38,16 +40,12 @@ const Results = (): ReactNode => {
     <section className="results">
       <div className="results__bg"></div>
       <ChooseLimit />
-      <Pagination
-        handleClick={startLoadingResults}
-        next={response.next}
-        previous={response.previous}
-      />
+      <Pagination handleClick={startLoadingResults} totalAmount={totalResults} limit={limit} />
       {isLoadingResults ? (
         <Loader />
       ) : (
         // <div className="results__items">
-        <ShowContent results={results} handleClick={startLoading} />
+        <ShowContent results={articles} handleClick={startLoading} />
         // </div>
       )}
       <div className="results__details">

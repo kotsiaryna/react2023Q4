@@ -5,19 +5,19 @@ import './pagination.scss';
 
 function Pagination({
   handleClick,
-  next,
-  previous,
+  totalAmount,
+  limit,
 }: {
   handleClick: () => void;
-  next: null | string;
-  previous: null | string;
+  totalAmount: number;
+  limit: number;
 }) {
   // TODO add disabled classes on last pages
   const { page, search } = useParams();
   const [curPage, setCurPage] = useState(page);
 
   const handleBackClick: MouseEventHandler = (e) => {
-    if (!previous) {
+    if (page === '1') {
       e.preventDefault();
     } else {
       setCurPage(`${Number(curPage) - 1}`);
@@ -26,7 +26,8 @@ function Pagination({
   };
 
   const handleForwardClick: MouseEventHandler = (e) => {
-    if (!next) {
+    const isLastPage = Number(page) * limit >= totalAmount;
+    if (isLastPage) {
       e.preventDefault();
     } else {
       setCurPage(`${Number(curPage) + 1}`);
