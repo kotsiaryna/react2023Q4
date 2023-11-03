@@ -1,18 +1,10 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useLoaderData } from 'react-router-dom';
 import { IArticle } from '../../types';
 
 function ArticleDetails() {
   const data = useLoaderData() as IArticle;
-  // const showData = (): ReactNode => {
-  //   return Object.entries(data).map(([key, value], i) => {
-  //     return (
-  //       <p key={i}>
-  //         {key.toUpperCase()}: {value}
-  //       </p>
-  //     );
-  //   });
-  // };
+
   const showDetails = (data: IArticle) => {
     return (
       <>
@@ -27,11 +19,14 @@ function ArticleDetails() {
     );
   };
   const { page, search } = useParams();
+  const location = useLocation();
+  const limit = location.search.split('=').at(-1);
+  const link = limit ? `/${search}/${page}?limit=${limit}` : `/${search}/${page}`;
 
   return (
     <>
       <div>{showDetails(data)}</div>
-      <Link to={`/${search}/${page}`} className="results__closeBtn">
+      <Link to={link} className="results__closeBtn">
         X
       </Link>
     </>

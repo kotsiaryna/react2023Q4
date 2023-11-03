@@ -29,8 +29,10 @@ export const searchRequest = async ({ params }: any): Promise<Response> => {
 // };
 
 export const articleRequest = async ({ params }: any) => {
+  console.log('fetching details');
   const { page, search, id } = params;
-  const url = `${BaseURL}?q=${search}&pageSize=5&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
+  const limit = window.location.search.split('=').at(-1) || '10';
+  const url = `${BaseURL}?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
   const resp = await fetch(url);
   if (!resp.ok) {
     throw new Error('error in fetch');
