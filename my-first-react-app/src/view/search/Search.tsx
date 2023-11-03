@@ -28,8 +28,8 @@ const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
         <input
           type="text"
           className="search__input"
-          placeholder={getInputValue()}
-          onInput={handleInputChange}
+          value={searchValue}
+          onChange={handleInputChange}
         ></input>
         <NavLink to={createLink()}>
           <button
