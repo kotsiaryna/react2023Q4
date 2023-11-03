@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './search.scss';
 import ChooseLimit from '../results/ChooseLimit';
 
-const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
+const Search = (): ReactNode => {
   const getInputValue = () => {
     const localValue = localStorage.getItem('inputValue');
     return localValue ? JSON.parse(localValue) : '';
@@ -33,9 +33,9 @@ const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
         <Link to={link}>
           <button
             className="search__btn"
-            onClick={() => {
-              props.handleClick(searchValue);
-            }}
+            // onClick={() => {
+            //   props.handleClick(searchValue);
+            // }}
           >
             Search
           </button>

@@ -1,41 +1,26 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Search from './search/Search';
-import { Outlet, useParams } from 'react-router-dom';
-import Loader from './results/Loader';
-// import Pagination from './results/Pagination';
-// import ChooseLimit from './results/ChooseLimit';
+import { Outlet } from 'react-router-dom';
+import ErrorButton from './error/errorButton';
 
 const App = (): ReactNode => {
-  const { search, page } = useParams();
+  const [errorIsThrown, setErrorIsThrown] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  const changeLoadingState = (value?: string, pageNumber?: string) => {
-    if (value !== search || pageNumber !== page) setIsLoading(true); // check if search has changed
+  const throwError = () => {
+    setErrorIsThrown(true);
   };
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [search, page]);
-
-  console.log(isLoading);
-  return (
-    <>
-      <Search handleClick={changeLoadingState} />
-
-      {isLoading ? (
-        <Loader />
-      ) : page ? (
-        <>
-          {/* <ChooseLimit /> */}
-          {/* <Pagination handleClick={changeLoadingState} /> */}
-          <Outlet />
-        </>
-      ) : (
-        ''
-      )}
-    </>
-  );
+  if (errorIsThrown) {
+    throw new Error('broken');
+  } else {
+    return (
+      <>
+        <ErrorButton handleClick={throwError} />
+        <Search />
+        <Outlet />
+      </>
+    );
+  }
 };
 
 export default App;

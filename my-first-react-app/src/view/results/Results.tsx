@@ -23,6 +23,7 @@ const Results = (): ReactNode => {
       .then((data) => {
         setArticles(data.articles);
         setTotalResults(data.totalResults);
+        setIsLoading(false);
       });
   }, [id, page, search, limit]);
 
@@ -46,23 +47,33 @@ const Results = (): ReactNode => {
     setIsLoadingResults(false);
   }, [articles]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [search, limit]);
+
   return (
     <section className="results">
       <div className="results__bg"></div>
-      {/* <ChooseLimit handleChange={startLoadingResults} /> */}
-      <Pagination
-        handleClick={startLoadingResults}
-        totalAmount={totalResults}
-        limit={+limit}
-        page={Number(page)}
-      />
-
-      {isLoadingResults ? (
+      {isLoading ? (
         <Loader />
-      ) : articles ? (
-        <ShowContent results={articles} handleClick={startLoading} />
       ) : (
-        false
+        <>
+          <Pagination
+            handleClick={startLoadingResults}
+            totalAmount={totalResults}
+            limit={+limit}
+            page={Number(page)}
+          />
+          {isLoadingResults ? (
+            <Loader />
+          ) : articles ? (
+            <ShowContent results={articles} handleClick={startLoading} />
+          ) : (
+            false
+          )}
+        </>
       )}
       <div className="results__details">
         {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}{' '}
