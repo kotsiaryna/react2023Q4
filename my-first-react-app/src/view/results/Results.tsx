@@ -1,27 +1,17 @@
 import { ReactNode, useEffect, useState } from 'react';
-// import { Response } from '../../types';
 import { Outlet, useParams } from 'react-router-dom';
-import Pagination from './Pagination';
-import ChooseLimit from './ChooseLimit';
-import Loader from './Loader';
 
-import './results.scss';
+import Pagination from './Pagination';
+import Loader from './Loader';
 import ShowContent from './ShowContent';
 
-const Results = (): ReactNode => {
-  // const response = useLoaderData() as Response;
-  // console.log(response);
-  // const results = response.articles;
-  // const { totalResults, articles } = response;
+import './results.scss';
 
+const Results = (): ReactNode => {
   const { id, page, search } = useParams();
+
   const [totalResults, setTotalResults] = useState(0);
   const limit = window.location.search.split('=').at(-1) || '10'; //TODO add limit to query
-
-  const handleLimitChange = () => {
-    startLoadingResults();
-    // redirect(`${search}/1?limit=${limit}`);
-  };
 
   const [articles, setArticles] = useState(null);
 
@@ -59,15 +49,13 @@ const Results = (): ReactNode => {
   return (
     <section className="results">
       <div className="results__bg"></div>
-      <ChooseLimit handleChange={handleLimitChange} />
+      {/* <ChooseLimit handleChange={startLoadingResults} /> */}
       <Pagination
         handleClick={startLoadingResults}
         totalAmount={totalResults}
         limit={+limit}
         page={Number(page)}
       />
-      {/* {articles && <ShowContent results={articles} handleClick={startLoading} />}
-      {isLoadingResults && <Loader />} */}
 
       {isLoadingResults ? (
         <Loader />

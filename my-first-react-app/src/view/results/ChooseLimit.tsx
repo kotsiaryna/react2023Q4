@@ -2,17 +2,15 @@ import React, { ChangeEvent } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import './chooseLimit.scss';
 
-const ChooseLimit = (props: { handleChange: () => void }) => {
+const ChooseLimit = () => {
   const { search } = useParams();
 
   const navigate = useNavigate();
 
   const [limit, setLimit] = useSearchParams();
-  console.log(limit.get('limit'));
 
   const changeLimit = (e: ChangeEvent<HTMLSelectElement>) => {
     const limit = e.target.value;
-    console.log(limit);
     navigate(`/${search}/1?limit=${limit}`);
     setLimit(`limit=${limit}`);
   };
@@ -25,8 +23,6 @@ const ChooseLimit = (props: { handleChange: () => void }) => {
         id="limit"
         onChange={(e) => {
           changeLimit(e);
-          props.handleChange();
-          // props.handleChange(e.target.value);
         }}
         defaultValue={(limit.get('limit') || 10).toString()}
       >

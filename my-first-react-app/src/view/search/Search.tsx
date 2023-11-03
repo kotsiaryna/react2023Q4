@@ -1,7 +1,8 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import './search.scss';
+import ChooseLimit from '../results/ChooseLimit';
 
 const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
   const getInputValue = () => {
@@ -15,15 +16,13 @@ const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
     setSearchValue(e.target.value);
   };
-
-  const createLink = () => {
-    const link = `/${searchValue}/1`;
-    return link;
-  };
+  const limit = useLocation().search.split('=').at(-1) || '10';
+  const link = `/${searchValue}/1?limit=${limit}`;
 
   return (
     <section className="search">
-      <h1 className="search__heading">Looking for a starship?</h1>
+      <h1 className="search__heading">Looking for a latest news?</h1>
+      <ChooseLimit />
       <div className="search__block">
         <input
           type="text"
@@ -31,7 +30,7 @@ const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
           value={searchValue}
           onChange={handleInputChange}
         ></input>
-        <NavLink to={createLink()}>
+        <Link to={link}>
           <button
             className="search__btn"
             onClick={() => {
@@ -40,7 +39,7 @@ const Search = (props: { handleClick: (value: string) => void }): ReactNode => {
           >
             Search
           </button>
-        </NavLink>
+        </Link>
       </div>
     </section>
   );
