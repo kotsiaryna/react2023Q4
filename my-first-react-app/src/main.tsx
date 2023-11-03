@@ -9,7 +9,7 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import Results from './view/results/Results';
-import { articleRequest, searchRequest } from './api';
+import { articleRequest } from './api';
 import ResultsError from './view/results/ResultsError';
 import Page404 from './view/notFound/Page404';
 import ErrorBoundary from './view/ErrorBoundary';
@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route
         path=":search/:page"
         element={<Results />}
-        loader={searchRequest}
+        // loader={searchRequest}
         errorElement={<ResultsError />}
       >
         <Route path=":id" element={<ArticleDetails />} loader={articleRequest} />
