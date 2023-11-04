@@ -1,7 +1,7 @@
 import { IArticle } from '../../types';
 import Article from './Article';
 
-type Props = { results: IArticle[]; handleClick: () => void };
+type Props = { results: IArticle[]; handleClick: (index: number) => void };
 
 const ShowContent = (props: Props) => {
   const { results, handleClick } = props;
@@ -17,7 +17,7 @@ const ShowContent = (props: Props) => {
               title={title}
               author={author}
               description={description}
-              handleClick={handleClick}
+              handleClick={() => handleClick(index)}
             />
           );
         })}

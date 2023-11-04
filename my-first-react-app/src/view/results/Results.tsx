@@ -34,8 +34,12 @@ const Results = (): ReactNode => {
     setIsLoadingDetails(false);
   }, [id]);
 
-  const startLoading = () => {
-    setIsLoadingDetails(true);
+  const startLoading = (index: number) => {
+    if (index !== Number(id)) {
+      setIsLoadingDetails(true);
+    } else {
+      // navigate and close details
+    }
   };
 
   const [isLoadingResults, setIsLoadingResults] = useState(true);
