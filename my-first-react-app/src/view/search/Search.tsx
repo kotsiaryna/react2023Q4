@@ -2,7 +2,7 @@ import { ChangeEvent, ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import './search.scss';
-import ChooseLimit from '../results/ChooseLimit';
+import ChooseLimit from './ChooseLimit';
 
 const Search = (): ReactNode => {
   const getInputValue = () => {
@@ -31,14 +31,7 @@ const Search = (): ReactNode => {
           onChange={handleInputChange}
         ></input>
         <Link to={link}>
-          <button
-            className="search__btn"
-            // onClick={() => {
-            //   props.handleClick(searchValue);
-            // }}
-          >
-            Search
-          </button>
+          <button className="search__btn">Search</button>
         </Link>
       </div>
     </section>

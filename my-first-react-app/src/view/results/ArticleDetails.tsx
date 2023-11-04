@@ -7,15 +7,16 @@ function ArticleDetails() {
 
   const showDetails = (data: IArticle) => {
     return (
-      <>
-        <img src={data.urlToImage} alt="image" />
-        <p>{data.title}</p>
+      <div className="details__inner">
+        {data.urlToImage && <img src={data.urlToImage} alt="image" />}
+        <h3>{data.title}</h3>
+        <p>{data.description}</p>
         <p>{data.content}</p>
         <p>{data.author}</p>
-        <a href={data.url} target="_blank" rel="noreferrer">
+        <a className="details__link" href={data.url} target="_blank" rel="noreferrer">
           Read more in origin
         </a>
-      </>
+      </div>
     );
   };
   const { page, search } = useParams();
@@ -25,7 +26,7 @@ function ArticleDetails() {
 
   return (
     <>
-      <div>{showDetails(data)}</div>
+      {showDetails(data)}
       <Link to={link} className="results__closeBtn">
         X
       </Link>

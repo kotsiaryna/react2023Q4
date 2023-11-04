@@ -17,14 +17,9 @@ import ArticleDetails from './view/results/ArticleDetails';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    // TODO errorElement for app = '404 Page not found'
+    // TODO errorElements for different errors
     <Route path="/" element={<App />} errorElement={<Page404 />}>
-      <Route
-        path=":search/:page"
-        element={<Results />}
-        // loader={searchRequest}
-        errorElement={<ResultsError />}
-      >
+      <Route path=":search/:page" element={<Results />} errorElement={<ResultsError />}>
         <Route path=":id" element={<ArticleDetails />} loader={articleRequest} />
       </Route>
     </Route>

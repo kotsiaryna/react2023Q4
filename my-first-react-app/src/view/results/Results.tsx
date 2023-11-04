@@ -59,8 +59,7 @@ const Results = (): ReactNode => {
       {isLoading ? (
         <Loader />
       ) : (
-        <>
-          <div className="results__bg"></div>
+        <div className="results__left">
           {articles && !!articles.length && (
             <Pagination
               handleClick={startLoadingResults}
@@ -76,10 +75,10 @@ const Results = (): ReactNode => {
           ) : (
             false
           )}
-        </>
+        </div>
       )}
       <div className="results__details">
-        {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}{' '}
+        {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
       </div>
     </section>
   );
