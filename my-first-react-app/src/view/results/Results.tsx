@@ -6,6 +6,7 @@ import Loader from './Loader';
 import ShowContent from './ShowContent';
 
 import './results.scss';
+import { IArticle } from '../../types';
 
 const Results = (): ReactNode => {
   const { id, page, search } = useParams();
@@ -13,7 +14,7 @@ const Results = (): ReactNode => {
   const [totalResults, setTotalResults] = useState(0);
   const limit = window.location.search.split('=').at(-1) || '10'; //TODO add limit to query
 
-  const [articles, setArticles] = useState(null);
+  const [articles, setArticles] = useState<IArticle[] | null>(null);
 
   useEffect(() => {
     const BaseURL = 'https://newsapi.org/v2/top-headlines';
@@ -55,17 +56,19 @@ const Results = (): ReactNode => {
 
   return (
     <section className="results">
-      <div className="results__bg"></div>
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <Pagination
-            handleClick={startLoadingResults}
-            totalAmount={totalResults}
-            limit={+limit}
-            page={Number(page)}
-          />
+          <div className="results__bg"></div>
+          {articles && !!articles.length && (
+            <Pagination
+              handleClick={startLoadingResults}
+              totalAmount={totalResults}
+              limit={+limit}
+              page={Number(page)}
+            />
+          )}
           {isLoadingResults ? (
             <Loader />
           ) : articles ? (
