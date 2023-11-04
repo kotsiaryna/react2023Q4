@@ -1,12 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { LoaderFunction } from 'react-router-dom';
 import { Response } from './types';
 
-// const BaseURL = 'https://swapi.dev/api/starships/';
 const BaseURL = 'https://newsapi.org/v2/top-headlines';
 
-export const searchRequest = async ({ params }: any): Promise<Response> => {
-  console.log('fetching data...');
+type Params = {
+  params: {
+    page: string;
+    search: string;
+  };
+};
+
+export const searchRequest = async ({ params }: Params): Promise<Response> => {
   const { page, search } = params;
   const limit = window.location.search.split('=').at(-1) || '';
   const url = `${BaseURL}?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
@@ -17,19 +21,8 @@ export const searchRequest = async ({ params }: any): Promise<Response> => {
   const result = await resp.json();
   return result;
 };
-// export const searchRequest = async ({ params }: any): Promise<Response> => {
-//   const { page, search } = params;
-//   const url = `${BaseURL}?search=${search}&page=${page}`;
-//   const resp = await fetch(url);
-//   if (!resp.ok) {
-//     throw new Error('error in fetch');
-//   }
-//   const result = await resp.json();
-//   return result;
-// };
 
-export const articleRequest = async ({ params }: any) => {
-  console.log('fetching details');
+export const articleRequest: LoaderFunction = async ({ params }) => {
   const { page, search, id } = params;
   const limit = window.location.search.split('=').at(-1) || '10';
   const url = `${BaseURL}?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
@@ -38,16 +31,8 @@ export const articleRequest = async ({ params }: any) => {
     throw new Error('error in fetch');
   }
   const result: Response = await resp.json();
-  const article = result.articles[id];
-
-  return article;
+  if (id) {
+    const article = result.articles[+id];
+    return article;
+  }
 };
-// export const shipRequest = async ({ params }: any) => {
-//   const url = `${BaseURL}/${params.id}`;
-//   const resp = await fetch(url);
-//   if (!resp.ok) {
-//     throw new Error('error in getting details');
-//   }
-//   const result = await resp.json();
-//   return result;
-// };
