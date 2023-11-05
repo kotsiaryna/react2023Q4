@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
@@ -7,6 +7,7 @@ import ShowContent from './ShowContent';
 
 import './results.scss';
 import { IArticle } from '../../types';
+import { searchRequest } from '../../api';
 
 const Results = (): ReactNode => {
   const { id, page, search } = useParams();
@@ -16,16 +17,21 @@ const Results = (): ReactNode => {
 
   const [articles, setArticles] = useState<IArticle[] | null>(null);
 
+  const fetchError = useRef<Error>();
+
   useEffect(() => {
-    const BaseURL = 'https://newsapi.org/v2/top-headlines';
-    const url = `${BaseURL}?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setArticles(data.articles);
-        setTotalResults(data.totalResults);
-        setIsLoading(false);
-      });
+    if (search && page) {
+      searchRequest({ search, page, limit })
+        .then((data) => {
+          setArticles(data.articles);
+          setTotalResults(data.totalResults);
+          setIsLoading(false);
+        })
+        .catch((error: Error) => {
+          setIsLoading(false);
+          fetchError.current = error;
+        });
+    }
   }, [id, page, search, limit]);
 
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
@@ -38,7 +44,7 @@ const Results = (): ReactNode => {
     if (index !== Number(id)) {
       setIsLoadingDetails(true);
     } else {
-      // navigate and close details
+      //TODO navigate and close details
     }
   };
 
@@ -77,7 +83,10 @@ const Results = (): ReactNode => {
           ) : articles ? (
             <ShowContent results={articles} handleClick={startLoading} />
           ) : (
-            false
+            <div>
+              <p>{fetchError.current?.name}</p>
+              <p>{fetchError.current?.message}</p>
+            </div>
           )}
         </div>
       )}
