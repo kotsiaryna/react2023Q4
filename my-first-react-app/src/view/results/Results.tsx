@@ -12,11 +12,11 @@ import { searchRequest } from '../../api';
 const Results = (): ReactNode => {
   const { id, page, search } = useParams();
 
-  const [totalResults, setTotalResults] = useState(0);
-  const limit = window.location.search.split('=').at(-1) || '10'; //TODO add limit to query
+  const limit = window.location.search.split('=').at(-1) || '10';
 
   const [articles, setArticles] = useState<IArticle[] | null>(null);
 
+  const totalResults = useRef<number>();
   const fetchError = useRef<Error>();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Results = (): ReactNode => {
       searchRequest({ search, page, limit })
         .then((data) => {
           setArticles(data.articles);
-          setTotalResults(data.totalResults);
+          totalResults.current = data.totalResults;
           setIsLoading(false);
         })
         .catch((error: Error) => {
@@ -34,19 +34,11 @@ const Results = (): ReactNode => {
     }
   }, [id, page, search, limit]);
 
-  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoadingDetails(false);
-  }, [id]);
-
-  const startLoading = (index: number) => {
-    if (index !== Number(id)) {
-      setIsLoadingDetails(true);
-    } else {
-      //TODO navigate and close details
-    }
-  };
+    setIsLoading(true);
+  }, [search, limit]);
 
   const [isLoadingResults, setIsLoadingResults] = useState(true);
 
@@ -58,11 +50,19 @@ const Results = (): ReactNode => {
     setIsLoadingResults(false);
   }, [articles]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-  }, [search, limit]);
+    setIsLoadingDetails(false);
+  }, [id]);
+
+  const startLoadingDetails = (index: number) => {
+    if (index !== Number(id)) {
+      setIsLoadingDetails(true);
+    } else {
+      //TODO navigate and close details
+    }
+  };
 
   return (
     <section className="results">
@@ -73,7 +73,7 @@ const Results = (): ReactNode => {
           {articles && !!articles.length && (
             <Pagination
               handleClick={startLoadingResults}
-              totalAmount={totalResults}
+              totalAmount={Number(totalResults.current)}
               limit={+limit}
               page={Number(page)}
             />
@@ -81,7 +81,7 @@ const Results = (): ReactNode => {
           {isLoadingResults ? (
             <Loader />
           ) : articles ? (
-            <ShowContent results={articles} handleClick={startLoading} />
+            <ShowContent results={articles} handleClick={startLoadingDetails} />
           ) : (
             <div>
               <p>{fetchError.current?.name}</p>

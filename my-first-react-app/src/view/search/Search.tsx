@@ -1,8 +1,7 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-
+import PageLimit from './PageLimit';
 import './search.scss';
-import ChooseLimit from './ChooseLimit';
 
 const Search = (): ReactNode => {
   const getInputValue = () => {
@@ -16,13 +15,14 @@ const Search = (): ReactNode => {
     localStorage.setItem('inputValue', JSON.stringify(e.target.value));
     setSearchValue(e.target.value);
   };
+
   const limit = useLocation().search.split('=').at(-1) || '10';
   const link = `/${searchValue}/1?limit=${limit}`;
 
   return (
     <section className="search">
-      <h1 className="search__heading">Looking for a latest news?</h1>
-      <ChooseLimit />
+      <h1 className="search__heading">Looking for the latest news?</h1>
+      <PageLimit />
       <div className="search__block">
         <input
           type="text"

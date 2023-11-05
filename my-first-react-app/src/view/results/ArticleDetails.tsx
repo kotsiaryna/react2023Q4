@@ -19,6 +19,7 @@ function ArticleDetails() {
       </div>
     );
   };
+
   const { page, search } = useParams();
   const location = useLocation();
   const limit = location.search.split('=').at(-1);

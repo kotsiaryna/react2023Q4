@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import './chooseLimit.scss';
+import './pageLimit.scss';
 
-const ChooseLimit = () => {
+const PageLimit = () => {
   const { search } = useParams();
 
   const navigate = useNavigate();
@@ -34,4 +34,4 @@ const ChooseLimit = () => {
   );
 };
 
-export default ChooseLimit;
+export default PageLimit;

@@ -37,7 +37,7 @@ function Pagination(props: Props) {
   return (
     <div className="pagination">
       <Link
-        to={`/${search}/${page === 1 ? page : Number(page) - 1}?limit=${limit}`}
+        to={`/${search}/${Number(page) - 1}?limit=${limit}`}
         onClick={(e) => {
           handleBackClick(e);
         }}

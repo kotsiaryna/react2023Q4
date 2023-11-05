@@ -6,7 +6,6 @@ function Page404(): ReactNode {
   return (
     <section className="page404">
       <h2>Page Not Found 404</h2>
-
       <Link to="/">Back on main</Link>
     </section>
   );
