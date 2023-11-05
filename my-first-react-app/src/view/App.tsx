@@ -11,7 +11,7 @@ const App = (): ReactNode => {
   };
 
   if (errorIsThrown) {
-    throw new Error('broken');
+    throw new Error('This is test error. Please, reload page to continue using this App ');
   } else {
     return (
       <>
