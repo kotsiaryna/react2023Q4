@@ -1,0 +1,19 @@
+.error-btn {
+  width: 120px;
+  height: 30px;
+
+  margin: 20px 40px 0 auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  color: rgb(173, 20, 20);
+  &:hover {
+    cursor: pointer;
+    transition: 0.3s;
+  }
+}
