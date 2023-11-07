@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
@@ -8,9 +8,12 @@ import ShowContent from './ShowContent';
 import './results.scss';
 import { IArticle } from '../../types';
 import { searchRequest } from '../../api';
+import { SearchValueContext } from '../../context';
 
 const Results = (): ReactNode => {
-  const { id, page, search } = useParams();
+  const { id, page } = useParams();
+
+  const { searchContextValue: search } = useContext(SearchValueContext);
 
   const limit = window.location.search.split('=').at(-1) || '10';
 
@@ -23,8 +26,10 @@ const Results = (): ReactNode => {
     if (search && page) {
       searchRequest({ search, page, limit })
         .then((data) => {
-          setArticles(data.articles);
-          totalResults.current = data.totalResults;
+          if (data) {
+            setArticles(data.articles);
+            totalResults.current = data.totalResults;
+          }
           setIsLoading(false);
         })
         .catch((error: Error) => {
