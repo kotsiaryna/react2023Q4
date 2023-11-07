@@ -8,7 +8,7 @@ import ShowContent from './ShowContent';
 import './results.scss';
 import { IArticle } from '../../types';
 import { searchRequest } from '../../api';
-import { SearchValueContext } from '../../context';
+import { ArticlesContext, SearchValueContext } from '../../context';
 
 const Results = (): ReactNode => {
   const { id, page } = useParams();
@@ -70,35 +70,37 @@ const Results = (): ReactNode => {
   };
 
   return (
-    <section className="results">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="results__left">
-          {articles && !!articles.length && (
-            <Pagination
-              handleClick={startLoadingResults}
-              totalAmount={Number(totalResults.current)}
-              limit={+limit}
-              page={Number(page)}
-            />
-          )}
-          {isLoadingResults ? (
-            <Loader />
-          ) : articles ? (
-            <ShowContent results={articles} handleClick={startLoadingDetails} />
-          ) : (
-            <div>
-              <p>{fetchError.current?.name}</p>
-              <p>{fetchError.current?.message}</p>
-            </div>
-          )}
+    <ArticlesContext.Provider value={articles}>
+      <section className="results">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="results__left">
+            {articles && !!articles.length && (
+              <Pagination
+                handleClick={startLoadingResults}
+                totalAmount={Number(totalResults.current)}
+                limit={+limit}
+                page={Number(page)}
+              />
+            )}
+            {isLoadingResults ? (
+              <Loader />
+            ) : articles ? (
+              <ShowContent handleClick={startLoadingDetails} />
+            ) : (
+              <div>
+                <p>{fetchError.current?.name}</p>
+                <p>{fetchError.current?.message}</p>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="results__details">
+          {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
         </div>
-      )}
-      <div className="results__details">
-        {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
-      </div>
-    </section>
+      </section>
+    </ArticlesContext.Provider>
   );
 };
 export default Results;

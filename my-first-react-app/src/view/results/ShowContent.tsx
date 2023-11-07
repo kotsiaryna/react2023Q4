@@ -1,11 +1,13 @@
-import { IArticle } from '../../types';
+import { useContext } from 'react';
 import Article from './Article';
+import { ArticlesContext } from '../../context';
 
-type Props = { results: IArticle[]; handleClick: (index: number) => void };
+type Props = { handleClick: (index: number) => void };
 
 const ShowContent = (props: Props) => {
-  const { results, handleClick } = props;
-  if (results.length) {
+  const { handleClick } = props;
+  const results = useContext(ArticlesContext);
+  if (results && results.length) {
     return (
       <div className="results__items">
         {results.map((res, index) => {

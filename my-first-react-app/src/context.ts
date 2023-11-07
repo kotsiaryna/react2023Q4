@@ -13,4 +13,4 @@ export const SearchValueContext = createContext<ISearchValueContext>({
   setSearchContextValue: null,
 });
 
-export const ResultsContext = createContext<IArticle[] | null>(null);
+export const ArticlesContext = createContext<IArticle[] | null>(null);
