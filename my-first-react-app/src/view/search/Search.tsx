@@ -2,10 +2,11 @@ import { ChangeEvent, ReactNode, useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PageLimit from './PageLimit';
 import './search.scss';
-import { SearchValueContext, defaultSearchValue } from '../../context';
+import { SearchValueContext } from '../../context';
 
 const Search = (): ReactNode => {
-  const [searchValue, setSearchValue] = useState(defaultSearchValue);
+  const localValue = localStorage.getItem('inputValue') || JSON.stringify('');
+  const [searchValue, setSearchValue] = useState(JSON.parse(localValue));
 
   const limit = useLocation().search.split('=').at(-1) || '10';
   let link: string = `/${searchValue}/1?limit=${limit}`;
