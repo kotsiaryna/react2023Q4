@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { BrowserRouter } from 'react-router-dom';
-import Pagination from '../view/results/Pagination';
+import Pagination from '../src/view/results/Pagination';
 
 describe('Pagination', () => {
   const startPageNumber = 2;

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import routesConfig from '../routerConfig';
+import routesConfig from '../src/routerConfig';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
 describe('Page 404', () => {

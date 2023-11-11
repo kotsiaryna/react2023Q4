@@ -40,3 +40,9 @@ export const fakeArticles = [
     handleClick: jest.fn(),
   },
 ];
+
+export const mockArticleRequest = () => {
+  return Promise.resolve(() => {
+    return fakeArticles[0];
+  });
+};

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { BrowserRouter } from 'react-router-dom';
-import Search from '../view/search/Search';
+import Search from '../src/view/search/Search';
 
 describe('Search', () => {
   it('input value is changed', () => {

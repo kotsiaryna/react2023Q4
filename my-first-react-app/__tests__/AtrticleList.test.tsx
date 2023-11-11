@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-import ArticleList from '../view/results/ArticleList';
+import ArticleList from '../src/view/results/ArticleList';
 import { fakeArticles } from './mockData';
 import { MemoryRouter } from 'react-router-dom';
-import { ArticlesContext } from '../context';
+import { ArticlesContext } from '../src/context';
 
 describe('ArticleList (Card List)', () => {
   it('renders the specified number of cards', () => {
