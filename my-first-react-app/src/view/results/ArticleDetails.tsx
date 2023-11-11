@@ -7,7 +7,7 @@ function ArticleDetails() {
 
   const showDetails = (data: IArticle) => {
     return (
-      <div className="details__inner">
+      <div className="details__inner" data-testid="article-details">
         {data.urlToImage && <img src={data.urlToImage} alt="image" />}
         <h3>{data.title}</h3>
         <p>{data.description}</p>

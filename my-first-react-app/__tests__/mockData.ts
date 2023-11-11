@@ -4,7 +4,9 @@ export const fakeArticles = [
     author: 'Author 0',
     title: 'title 0',
     description: 'some description',
+    content: 'bla-bla-bla',
     urlToImage: '/',
+    url: '/origin',
     handleClick: jest.fn(),
   },
   {
@@ -12,7 +14,9 @@ export const fakeArticles = [
     author: 'Author 1',
     title: 'title 1',
     description: 'some description1',
+    content: 'bla-bla-bla',
     urlToImage: '/1',
+    url: '/origin',
     handleClick: jest.fn(),
   },
   {
@@ -20,7 +24,9 @@ export const fakeArticles = [
     author: 'Author 2',
     title: 'title 2',
     description: 'some description3',
+    content: 'bla-bla-bla',
     urlToImage: '/2',
+    url: '/origin',
     handleClick: jest.fn(),
   },
   {
@@ -28,7 +34,9 @@ export const fakeArticles = [
     author: 'Author 3',
     title: 'title 3',
     description: 'some description3',
+    content: 'bla-bla-bla',
     urlToImage: '/3',
+    url: '/origin',
     handleClick: jest.fn(),
   },
   {
@@ -36,7 +44,9 @@ export const fakeArticles = [
     author: 'Author 4',
     title: 'title 4',
     description: 'some description4',
+    content: 'bla-bla-bla',
     urlToImage: '/4',
+    url: '/origin',
     handleClick: jest.fn(),
   },
 ];
