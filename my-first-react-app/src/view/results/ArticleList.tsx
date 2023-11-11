@@ -4,7 +4,7 @@ import { ArticlesContext } from '../../context';
 
 type Props = { handleClick: (index: number) => void };
 
-const ShowContent = (props: Props) => {
+const ArticleList = (props: Props) => {
   const { handleClick } = props;
   const results = useContext(ArticlesContext);
   if (results && results.length) {
@@ -30,4 +30,4 @@ const ShowContent = (props: Props) => {
   }
 };
 
-export default ShowContent;
+export default ArticleList;

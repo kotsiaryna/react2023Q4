@@ -3,12 +3,11 @@ import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
 import Loader from './Loader';
-import ShowContent from './ShowContent';
-
-import './results.scss';
+import ArticleList from './ArticleList';
 import { IArticle } from '../../types';
 import { searchRequest } from '../../api';
 import { ArticlesContext, SearchValueContext } from '../../context';
+import './results.scss';
 
 const Results = (): ReactNode => {
   const { id, page } = useParams();
@@ -71,7 +70,7 @@ const Results = (): ReactNode => {
 
   return (
     <ArticlesContext.Provider value={articles}>
-      <section className="results">
+      <section className="results" data-testid="results">
         {isLoading ? (
           <Loader />
         ) : (
@@ -87,7 +86,7 @@ const Results = (): ReactNode => {
             {isLoadingResults ? (
               <Loader />
             ) : articles ? (
-              <ShowContent handleClick={startLoadingDetails} />
+              <ArticleList handleClick={startLoadingDetails} />
             ) : (
               <div>
                 <p>{fetchError.current?.name}</p>
