@@ -1,0 +1,28 @@
+.page404 {
+  width: 100%;
+  height: calc(100vh - 186px - 50px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 100px;
+  gap: 2em;
+
+  h2 {
+    font-size: 2em;
+  }
+
+  a {
+    display: block;
+    padding: 10px 20px;
+    font-size: 1.5em;
+    border-radius: 5px;
+    border: 1px solid white;
+    background-color: #1f2122c4;
+
+    &:hover {
+      color: black;
+      background-color: white;
+    }
+  }
+}

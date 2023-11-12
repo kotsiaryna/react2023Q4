@@ -1,0 +1,21 @@
+$color-light: #ece9e5;
+$color-dark:#1f2122;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  transition: all 0.3s;
+
+}
+
+a {
+  outline: none;
+  color: inherit;
+  text-decoration: none;
+}
+body {
+  background-image: url('./assets/bg.jpg');
+  background-color: black;
+  color: $color-light;
+}
