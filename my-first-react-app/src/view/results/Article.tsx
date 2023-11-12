@@ -8,10 +8,10 @@ const Article = (props: IArticle): ReactNode => {
   const limit = location.search.split('=').at(-1);
   const link = limit ? `${index}?limit=${limit}` : `${index}`;
   return (
-    <Link to={link} onClick={handleClick}>
+    <Link to={link} onClick={handleClick} data-testid={`article${index}`}>
       <div className="results__item">
-        <div className="item__name">{title}</div>
-        <div className="item__author">{author}</div>
+        <h4 className="item__name">{title}</h4>
+        <p className="item__author">{author}</p>
       </div>
     </Link>
   );

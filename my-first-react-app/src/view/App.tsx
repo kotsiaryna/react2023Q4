@@ -17,13 +17,13 @@ const App = (): ReactNode => {
     throw new Error('This is test error. Please, reload page to continue using this App ');
   } else {
     return (
-      <>
+      <section data-testid="app">
         <ErrorButton handleClick={throwError} />
         <SearchValueContext.Provider value={{ searchContextValue, setSearchContextValue }}>
           <Search />
           <Outlet />
         </SearchValueContext.Provider>
-      </>
+      </section>
     );
   }
 };
