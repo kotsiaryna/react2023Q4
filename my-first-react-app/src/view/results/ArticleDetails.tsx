@@ -5,8 +5,13 @@ import { IArticle } from '../../types';
 function ArticleDetails() {
   const data = useLoaderData() as IArticle;
 
-  const showDetails = (data: IArticle) => {
-    return (
+  const { page, search } = useParams();
+  const location = useLocation();
+  const limit = location.search.split('=').at(-1);
+  const link = limit ? `/${search}/${page}?limit=${limit}` : `/${search}/${page}`;
+
+  return (
+    <>
       <div className="details__inner" data-testid="article-details">
         {data.urlToImage && <img src={data.urlToImage} alt="image" />}
         <h3>{data.title}</h3>
@@ -17,17 +22,6 @@ function ArticleDetails() {
           Read more in origin
         </a>
       </div>
-    );
-  };
-
-  const { page, search } = useParams();
-  const location = useLocation();
-  const limit = location.search.split('=').at(-1);
-  const link = limit ? `/${search}/${page}?limit=${limit}` : `/${search}/${page}`;
-
-  return (
-    <>
-      {showDetails(data)}
       <Link to={link} className="results__closeBtn">
         X
       </Link>

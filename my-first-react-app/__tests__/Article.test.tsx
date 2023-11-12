@@ -8,7 +8,7 @@ import Article from '../src/view/results/Article';
 import Page404 from '../src/view/notFound/Page404';
 import ArticleDetails from '../src/view/results/ArticleDetails';
 import Results from '../src/view/results/Results';
-import { mockArticleRequest } from './mockData';
+import { fakeArticles, mockArticleRequest } from './mockData';
 
 const routesConfig = [
   {
@@ -31,7 +31,7 @@ const router = createMemoryRouter(routesConfig, {
   initialEntries: ['/news/1?limit=5'],
 });
 
-describe('Article - card short info', () => {
+describe('Article - card short info & card details', () => {
   const testData = {
     index: 0,
     author: 'Author',
@@ -86,6 +86,68 @@ describe('Article - card short info', () => {
 
       fireEvent.click(articleElements[0]);
       expect(mockArticleRequest).toHaveBeenCalled();
+    });
+  });
+
+  it('Detailed Card: a loading indicator is displayed while fetching data', () => {
+    render(<RouterProvider router={router} />);
+
+    const loader = screen.getByTestId('loader');
+    waitForElementToBeRemoved(loader).then(() => {
+      const articleElements = screen.getAllByRole('link');
+      const firstArticle = articleElements[0];
+      expect(firstArticle).toBeInTheDocument();
+
+      fireEvent.click(articleElements[0]);
+
+      expect(loader).toBeInTheDocument();
+    });
+  });
+
+  it('Detailed Card correctly displays the detailed card data', () => {
+    render(<RouterProvider router={router} />);
+
+    const loader = screen.getByTestId('loader');
+    waitForElementToBeRemoved(loader).then(() => {
+      const articleElements = screen.getAllByRole('link');
+      const firstArticle = articleElements[0];
+      expect(firstArticle).toBeInTheDocument();
+
+      fireEvent.click(articleElements[0]);
+      waitForElementToBeRemoved(loader).then(() => {
+        const articleDetailsElement = screen.getByTestId('article-details');
+        const headingElement = screen.getByRole('heading');
+        const descriptionElement = screen.getByText(fakeArticles[0].description);
+        const contentElement = screen.getByText(fakeArticles[0].content);
+        const authorElement = screen.getByText(fakeArticles[0].author);
+        const linkToOrigin: HTMLAnchorElement = screen.getByText(/Read more in origin/i);
+
+        expect(articleDetailsElement).toBeInTheDocument();
+        expect(headingElement).toHaveTextContent(fakeArticles[0].title);
+        expect(descriptionElement).toBeInTheDocument();
+        expect(contentElement).toBeInTheDocument();
+        expect(authorElement).toBeInTheDocument();
+        expect(linkToOrigin.href).toBe(fakeArticles[0].url);
+      });
+    });
+  });
+  it('Detailed Card: clicking the close button hides the component', () => {
+    render(<RouterProvider router={router} />);
+
+    const loader = screen.getByTestId('loader');
+    waitForElementToBeRemoved(loader).then(() => {
+      const articleElements = screen.getAllByRole('link');
+      const firstArticle = articleElements[0];
+      fireEvent.click(firstArticle);
+
+      waitForElementToBeRemoved(loader).then(() => {
+        const closeButton = screen.getByRole('link');
+        const detailsElement = screen.getByTestId(/article-details/);
+
+        fireEvent.click(closeButton);
+        expect(closeButton).not.toBeInTheDocument();
+        expect(detailsElement).not.toBeInTheDocument();
+      });
     });
   });
 });
