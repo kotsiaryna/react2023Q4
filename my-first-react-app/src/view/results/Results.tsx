@@ -38,6 +38,23 @@ const Results = (): ReactNode => {
     }
   }, [id, page, search, limit]);
 
+  useEffect(() => {
+    searchRequest({ search: 'news', page: '1', limit: '10' })
+      .then((data) => {
+        if (data) {
+          setArticles(data.articles);
+          totalResults.current = data.totalResults;
+        }
+        setIsLoading(false);
+      })
+      .catch((error: Error) => {
+        setIsLoading(false);
+        fetchError.current = error;
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
