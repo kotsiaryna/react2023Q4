@@ -9,6 +9,13 @@ import Page404 from '../src/view/notFound/Page404';
 import ArticleDetails from '../src/view/results/ArticleDetails';
 import Results from '../src/view/results/Results';
 import { fakeArticles, mockArticleRequest } from './mockData';
+import { articleRequest } from '../src/api';
+
+global.fetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ status: '200', totalResults: 30, articles: fakeArticles }),
+  })
+);
 
 const routesConfig = [
   {
@@ -18,7 +25,7 @@ const routesConfig = [
       {
         path: ':id',
         element: <ArticleDetails />,
-        loader: mockArticleRequest,
+        loader: articleRequest,
       },
     ],
   },
@@ -59,10 +66,11 @@ describe('Article - card short info & card details', () => {
     expect(authorElement).toBeInTheDocument();
   });
 
-  it('clicking on a card opens a detailed card component', () => {
+  it('clicking on a card opens a detailed card component', async () => {
     render(<RouterProvider router={router} />);
 
     const loader = screen.getByTestId('loader');
+    expect(loader).toBeInTheDocument();
     waitForElementToBeRemoved(loader).then(() => {
       const articleElements = screen.getAllByRole('link');
       expect(articleElements[0]).toBeInTheDocument();
@@ -108,6 +116,7 @@ describe('Article - card short info & card details', () => {
     render(<RouterProvider router={router} />);
 
     const loader = screen.getByTestId('loader');
+
     waitForElementToBeRemoved(loader).then(() => {
       const articleElements = screen.getAllByRole('link');
       const firstArticle = articleElements[0];
