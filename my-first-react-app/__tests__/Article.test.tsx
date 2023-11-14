@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 
 import { BrowserRouter, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
@@ -16,6 +16,12 @@ global.fetch = jest.fn().mockImplementation(() =>
     json: () => Promise.resolve({ status: '200', totalResults: 30, articles: fakeArticles }),
   })
 );
+global['Request'] = jest.fn().mockImplementation(() => ({
+  signal: {
+    removeEventListener: () => {},
+    addEventListener: () => {},
+  },
+}));
 
 const routesConfig = [
   {
@@ -35,7 +41,7 @@ const routesConfig = [
   },
 ];
 const router = createMemoryRouter(routesConfig, {
-  initialEntries: ['/news/1?limit=5'],
+  initialEntries: ['/news/1'],
 });
 
 describe('Article - card short info & card details', () => {
@@ -69,18 +75,38 @@ describe('Article - card short info & card details', () => {
   it('clicking on a card opens a detailed card component', async () => {
     render(<RouterProvider router={router} />);
 
-    const loader = screen.getByTestId('loader');
+    let loader = screen.getByTestId('loader');
     expect(loader).toBeInTheDocument();
-    waitForElementToBeRemoved(loader).then(() => {
-      const articleElements = screen.getAllByRole('link');
-      expect(articleElements[0]).toBeInTheDocument();
-
-      fireEvent.click(articleElements[0]);
-      waitForElementToBeRemoved(loader).then(() => {
-        const detailsElement = screen.getByTestId(/article-details/i);
-        expect(detailsElement).toBeInTheDocument();
-      });
+    const resultList = await screen.findAllByTestId(/article/i);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    act(() => {
+      fireEvent.click(resultList[0]);
     });
+    loader = screen.getByTestId('loader');
+    expect(loader).toBeInTheDocument();
+
+    const detailsElement = await screen.findByTestId('article-details');
+
+    expect(detailsElement).toBeInTheDocument();
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+
+    const closeBtn = screen.getByText('X');
+
+    act(() => {
+      fireEvent.click(closeBtn);
+    });
+    expect(detailsElement).not.toBeInTheDocument();
+
+    // waitForElementToBeRemoved(loader).then(() => {
+    //   const articleElements = screen.getAllByRole('link');
+    //   expect(articleElements[0]).toBeInTheDocument();
+
+    //   fireEvent.click(articleElements[0]);
+    //   waitForElementToBeRemoved(loader).then(() => {
+    //     const detailsElement = screen.getByTestId(/article-details/i);
+    //     expect(detailsElement).toBeInTheDocument();
+    //   });
+    // });
   });
 
   it('clicking triggers an additional API call to fetch detailed info', () => {
