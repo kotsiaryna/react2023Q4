@@ -1,125 +1,144 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
 import Loader from './Loader';
 import ArticleList from './ArticleList';
-import { IArticle } from '../../types';
-import { searchRequest } from '../../api';
-import { ArticlesContext } from '../../context';
 import './results.scss';
 import { useSelector } from 'react-redux';
 import { State } from '../../store/store';
+import { useGetNewsQuery } from '../../apiRTK';
 
 const Results = (): ReactNode => {
-  const { id, page } = useParams();
+  const { page } = useParams();
 
   // const { searchContextValue: search } = useContext(SearchValueContext);
 
   const search = useSelector((state: State) => state.searchValue.value);
   const limit = useSelector((state: State) => state.itemsPerPage.value);
 
-  const [articles, setArticles] = useState<IArticle[] | null>(null);
+  const { data, isLoading, error } = useGetNewsQuery({ search, limit, page: page || '1' });
+  console.log(data);
 
-  const totalResults = useRef<number>();
-  const fetchError = useRef<Error>();
+  // const [articles, setArticles] = useState<IArticle[] | null>(data);
 
-  useEffect(() => {
-    if (page) {
-      searchRequest({ search, page, limit })
-        .then((data) => {
-          if (data) {
-            setArticles(data.articles);
-            totalResults.current = data.totalResults;
-          }
-          setIsLoading(false);
-        })
-        .catch((error: Error) => {
-          setIsLoading(false);
-          fetchError.current = error;
-        });
-    }
-  }, [id, page, search, limit]);
+  // const totalResults = useRef<number>();
+  // const fetchError = useRef<Error>();
 
-  useEffect(() => {
-    searchRequest({ search: 'news', page: '1', limit: '10' })
-      .then((data) => {
-        if (data) {
-          setArticles(data.articles);
-          totalResults.current = data.totalResults;
-        }
-        setIsLoading(false);
-      })
-      .catch((error: Error) => {
-        setIsLoading(false);
-        fetchError.current = error;
-      });
+  // useEffect(() => {
+  //   searchRequest({ search, page: page || '1', limit })
+  //     .then((data) => {
+  //       if (data) {
+  //         setArticles(data.articles);
+  //         totalResults.current = data.totalResults;
+  //       }
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error: Error) => {
+  //       setIsLoading(false);
+  //       fetchError.current = error;
+  //     });
+  // }, [id, page, search, limit]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   searchRequest({ search: 'news', page: '1', limit: '10' })
+  //     .then((data) => {
+  //       if (data) {
+  //         setArticles(data.articles);
+  //         totalResults.current = data.totalResults;
+  //       }
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error: Error) => {
+  //       setIsLoading(false);
+  //       fetchError.current = error;
+  //     });
 
-  const [isLoading, setIsLoading] = useState(true);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [search, limit]);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  const [isLoadingResults, setIsLoadingResults] = useState(true);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  // }, [search, limit]);
 
-  const startLoadingResults = () => {
-    setIsLoadingResults(true);
-  };
+  // const [isLoadingResults, setIsLoadingResults] = useState(true);
 
-  useEffect(() => {
-    setIsLoadingResults(false);
-  }, [articles]);
+  // const startLoadingResults = () => {
+  //   setIsLoadingResults(true);
+  // };
 
-  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  // useEffect(() => {
+  //   setIsLoadingResults(false);
+  // }, [articles]);
 
-  useEffect(() => {
-    setIsLoadingDetails(false);
-  }, [id]);
+  // const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
-  const startLoadingDetails = (index: number) => {
-    if (index !== Number(id)) {
-      setIsLoadingDetails(true);
-    } else {
-      //TODO navigate and close details
-    }
-  };
+  // useEffect(() => {
+  //   setIsLoadingDetails(false);
+  // }, [id]);
 
+  // const startLoadingDetails = (index: number) => {
+  //   if (index !== Number(id)) {
+  //     setIsLoadingDetails(true);
+  //   } else {
+  //     //TODO navigate and close details
+  //   }
+  // };
   return (
-    <ArticlesContext.Provider value={articles}>
-      <section className="results" data-testid="results">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <div className="results__left">
-            {articles && !!articles.length && (
-              <Pagination
-                handleClick={startLoadingResults}
-                totalAmount={Number(totalResults.current)}
-                limit={+limit}
-                page={Number(page)}
-              />
-            )}
-            {isLoadingResults ? (
-              <Loader />
-            ) : articles ? (
-              <ArticleList handleClick={startLoadingDetails} />
-            ) : (
-              <div>
-                <p>{fetchError.current?.name}</p>
-                <p>{fetchError.current?.message}</p>
-              </div>
-            )}
-          </div>
+    <section className="results" data-testid="results">
+      {isLoading && <Loader />}
+      <div className="results__left">
+        {data && (
+          <Pagination
+            handleClick={() => {}}
+            totalAmount={data.totalResults}
+            limit={+limit}
+            page={Number(page)}
+          />
         )}
-        <div className="results__details">
-          {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
-        </div>
-      </section>
-    </ArticlesContext.Provider>
+        {data && <ArticleList handleClick={() => {}} results={data.articles} />}
+        {error && <p>Error in fetch </p>}
+      </div>
+      <div className="results__details">
+        <Outlet />
+      </div>
+    </section>
   );
+
+  // return (
+  //   <ArticlesContext.Provider value={articles}>
+  //     <section className="results" data-testid="results">
+  //       {isLoading ? (
+  //         <Loader />
+  //       ) : (
+  //         <div className="results__left">
+  //           {articles && !!articles.length && (
+  //             <Pagination
+  //               handleClick={startLoadingResults}
+  //               totalAmount={Number(totalResults.current)}
+  //               limit={+limit}
+  //               page={Number(page)}
+  //             />
+  //           )}
+  //           {isLoadingResults ? (
+  //             <Loader />
+  //           ) : articles ? (
+  //             <ArticleList handleClick={startLoadingDetails} />
+  //           ) : (
+  //             <div>
+  //               <p>{fetchError.current?.name}</p>
+  //               <p>{fetchError.current?.message}</p>
+  //             </div>
+  //           )}
+  //         </div>
+  //       )}
+  //       <div className="results__details">
+  //         {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
+  //       </div>
+  //     </section>
+  //   </ArticlesContext.Provider>
+  // );
 };
 export default Results;
