@@ -1,18 +1,21 @@
 import React, { ChangeEvent } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './pageLimit.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeItemsPerPage } from '../../store/itemsPerPageSlice';
+import { State } from '../../store/store';
 
 const PageLimit = () => {
-  const { search } = useParams();
-
+  const [limit] = useSearchParams();
   const navigate = useNavigate();
+  const search = useSelector((state: State) => state.searchValue.value);
 
-  const [limit, setLimit] = useSearchParams();
+  const dispatch = useDispatch();
 
   const changeLimit = (e: ChangeEvent<HTMLSelectElement>) => {
     const limit = e.target.value;
-    navigate(`/${search}/1?limit=${limit}`);
-    setLimit(`limit=${limit}`);
+    dispatch(changeItemsPerPage(limit));
+    navigate(`${search}/1?limit=${limit}`);
   };
 
   return (

@@ -1,8 +1,10 @@
-import { ChangeEvent, ReactNode, useContext, useState } from 'react';
+import { ChangeEvent, ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PageLimit from './PageLimit';
 import './search.scss';
-import { SearchValueContext } from '../../context';
+// import { SearchValueContext } from '../../context';
+import { useDispatch } from 'react-redux';
+import { changeSearch } from '../../store/searchSlice';
 
 const Search = (): ReactNode => {
   const localValue = localStorage.getItem('inputValue') || JSON.stringify('');
@@ -11,9 +13,10 @@ const Search = (): ReactNode => {
   const limit = useLocation().search.split('=').at(-1) || '10';
   let link: string = `/${searchValue}/1?limit=${limit}`;
 
-  const { setSearchContextValue } = useContext(SearchValueContext);
-  const changeContextValue = () => {
-    if (setSearchContextValue) setSearchContextValue(searchValue);
+  // const { setSearchContextValue } = useContext(SearchValueContext);
+  const dispatch = useDispatch();
+  const saveSearchValue = () => {
+    dispatch(changeSearch(searchValue));
     link = `/${searchValue}/1?limit=${limit}`;
   };
 
@@ -34,7 +37,7 @@ const Search = (): ReactNode => {
           onChange={handleInputChange}
         ></input>
         <Link to={link}>
-          <button className="search__btn" onClick={changeContextValue}>
+          <button className="search__btn" onClick={saveSearchValue}>
             Search
           </button>
         </Link>

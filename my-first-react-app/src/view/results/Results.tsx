@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
@@ -6,15 +6,18 @@ import Loader from './Loader';
 import ArticleList from './ArticleList';
 import { IArticle } from '../../types';
 import { searchRequest } from '../../api';
-import { ArticlesContext, SearchValueContext } from '../../context';
+import { ArticlesContext } from '../../context';
 import './results.scss';
+import { useSelector } from 'react-redux';
+import { State } from '../../store/store';
 
 const Results = (): ReactNode => {
   const { id, page } = useParams();
 
-  const { searchContextValue: search } = useContext(SearchValueContext);
+  // const { searchContextValue: search } = useContext(SearchValueContext);
 
-  const limit = window.location.search.split('=').at(-1) || '10';
+  const search = useSelector((state: State) => state.searchValue.value);
+  const limit = useSelector((state: State) => state.itemsPerPage.value);
 
   const [articles, setArticles] = useState<IArticle[] | null>(null);
 
@@ -22,7 +25,7 @@ const Results = (): ReactNode => {
   const fetchError = useRef<Error>();
 
   useEffect(() => {
-    if (search && page) {
+    if (page) {
       searchRequest({ search, page, limit })
         .then((data) => {
           if (data) {
