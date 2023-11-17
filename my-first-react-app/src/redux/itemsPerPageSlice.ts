@@ -1,15 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  value: '10',
-};
+const initialState = '10';
 
 const itemsPerPageSlice = createSlice({
   name: 'itemsPerPage',
   initialState,
   reducers: {
     changeItemsPerPage(state, action: PayloadAction<string>) {
-      state.value = action.payload;
+      state = action.payload;
     },
   },
 });

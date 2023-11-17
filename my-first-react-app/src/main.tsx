@@ -5,7 +5,7 @@ import routesConfig from './routerConfig';
 
 import './index.scss';
 import { Provider } from 'react-redux';
-import store from './store/store';
+import store from './redux/store';
 
 const router = createBrowserRouter(routesConfig);
 

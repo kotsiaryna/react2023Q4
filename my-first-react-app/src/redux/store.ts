@@ -1,19 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import searchValueReducer, { SearchValueState } from './searchSlice';
+import searchValueReducer from './searchSlice';
 import itemsPerPageReducer from './itemsPerPageSlice';
 import flagReducer, { FlagsState } from './flagSlice';
 import { loadSearchValue } from '../utils/localStorageUtils';
 
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { newsApi } from '../apiRTK';
+import { newsApi } from './apiRTK';
 
 export type State = {
-  // itemsPerPage: SearchValueState;
-  searchValue: SearchValueState;
+  searchValue: string;
   flags: FlagsState;
-  itemsPerPage: {
-    value: string;
-  };
+  itemsPerPage: string;
 };
 
 const reducer = {
@@ -24,12 +21,8 @@ const reducer = {
 };
 
 const preloadedState: State = {
-  searchValue: {
-    value: loadSearchValue(),
-  },
-  itemsPerPage: {
-    value: '10',
-  },
+  searchValue: loadSearchValue() || '',
+  itemsPerPage: '10',
   flags: {
     isLoadingResults: false,
     isLoadingPage: false,
@@ -42,6 +35,7 @@ const store = configureStore({
   preloadedState,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(newsApi.middleware),
 });
+
 // don't know if it necessary
 setupListeners(store.dispatch);
 

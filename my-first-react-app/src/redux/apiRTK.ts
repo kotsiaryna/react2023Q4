@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Params } from './api';
-import { Response } from './types';
+import { Params } from '../api';
+import { Response } from '../types';
 
 export const newsApi = createApi({
   reducerPath: 'news',
@@ -10,13 +10,15 @@ export const newsApi = createApi({
       query: ({ search, page, limit }: Params) =>
         `?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`,
       // Pick out error and prevent nested properties in a hook or selector
-      transformErrorResponse: (response) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
     }),
     DetailedNews: builder.query({
-      query: ({ search, page, limit }: Params) =>
-        `?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`,
+      query: ({ search, page, limit, id }: Params) => {
+        console.log(id);
+        return `?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`;
+      },
       transformResponse: (response: Response) => response.articles,
-      transformErrorResponse: (response) => response.data,
+      transformErrorResponse: (response: { status: string | number }) => response.status,
     }),
   }),
 });
