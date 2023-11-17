@@ -1,52 +1,53 @@
 import { Link, useParams } from 'react-router-dom';
-// import { useLoaderData } from 'react-router-dom';
-// import { IArticle } from '../../types';
 import { useDetailedNewsQuery } from '../../apiRTK';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../store/store';
 import Loader from './Loader';
+import { useEffect } from 'react';
 import { changeDetailsFlag } from '../../store/flagSlice';
 
 function ArticleDetails() {
-  // const data = useLoaderData() as IArticle;
-  const { page, id } = useParams();
+  const { page = '1', id } = useParams();
   const search = useSelector((state: State) => state.searchValue.value);
   const limit = useSelector((state: State) => state.itemsPerPage.value);
-  const { data: articles, isLoading, error } = useDetailedNewsQuery({ page: '1', search, limit });
-
+  const {
+    data: article,
+    isFetching,
+    isError,
+  } = useDetailedNewsQuery(
+    { page, search, limit, id },
+    {
+      selectFromResult: ({ data, isError, isFetching }) => ({
+        data: data?.find((el, i) => i === Number(id)),
+        isError,
+        isFetching,
+      }),
+    }
+  );
   const dispatch = useDispatch();
-  dispatch(changeDetailsFlag(isLoading));
-
-  // const location = useLocation();
-  // const limit = location.search.split('=').at(-1);
-  const link = limit ? `/${search}/${page}?limit=${limit}` : `/${search}/${page}`;
-
-  const isLoadingDetails = useSelector((state: State) => state.flags.isLoadingDetails);
+  useEffect(() => {
+    dispatch(changeDetailsFlag(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   return (
     <>
-      {isLoadingDetails && <Loader />}
-      {articles && (
+      {isFetching ? (
+        <Loader />
+      ) : article ? (
         <div className="details__inner" data-testid="article-details">
-          {articles[Number(id)].urlToImage && (
-            <img src={articles[Number(id)].urlToImage} alt="image" />
-          )}
-          <h3>{articles[Number(id)].title}</h3>
-          <p>{articles[Number(id)].description}</p>
-          <p>{articles[Number(id)].content}</p>
-          <p>{articles[Number(id)].author}</p>
-          <a
-            className="details__link"
-            href={articles[Number(id)].url}
-            target="_blank"
-            rel="noreferrer"
-          >
+          {article.urlToImage && <img src={article.urlToImage} alt="image" />}
+          <h3>{article.title}</h3>
+          <p>{article.description}</p>
+          <p>{article.content}</p>
+          <p>{article.author}</p>
+          <a className="details__link" href={article.url} target="_blank" rel="noreferrer">
             Read more in origin
           </a>
         </div>
-      )}
-      {error && <p>Error in fetch</p>}
-      <Link to={link} className="results__closeBtn">
+      ) : null}
+      {isError && <p>Error in fetch </p>}
+      <Link to={`/${search}/${page}?limit=${limit}`} className="results__closeBtn">
         X
       </Link>
     </>

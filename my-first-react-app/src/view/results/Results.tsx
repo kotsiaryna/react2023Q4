@@ -1,29 +1,29 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 import Pagination from './Pagination';
 import Loader from './Loader';
 import ArticleList from './ArticleList';
 import './results.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../store/store';
 import { useGetNewsQuery } from '../../apiRTK';
+import { changeDetailsFlag, changeResultsFlag } from '../../store/flagSlice';
 
 const Results = (): ReactNode => {
   const { page } = useParams();
 
-  // const { searchContextValue: search } = useContext(SearchValueContext);
-
   const search = useSelector((state: State) => state.searchValue.value);
   const limit = useSelector((state: State) => state.itemsPerPage.value);
+  const isLoadingResults = useSelector((state: State) => state.flags.isLoadingResults);
 
-  const { data, isLoading, error } = useGetNewsQuery({ search, limit, page: page || '1' });
-  console.log(data);
+  const { data, isFetching, error } = useGetNewsQuery({ search, limit, page: page || '1' });
 
-  // const [articles, setArticles] = useState<IArticle[] | null>(data);
-
-  // const totalResults = useRef<number>();
-  // const fetchError = useRef<Error>();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(changeResultsFlag(isFetching));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   // useEffect(() => {
   //   searchRequest({ search, page: page || '1', limit })
@@ -88,17 +88,27 @@ const Results = (): ReactNode => {
   // };
   return (
     <section className="results" data-testid="results">
-      {isLoading && <Loader />}
       <div className="results__left">
-        {data && (
-          <Pagination
-            handleClick={() => {}}
-            totalAmount={data.totalResults}
-            limit={+limit}
-            page={Number(page)}
-          />
+        {isLoadingResults ? (
+          <Loader />
+        ) : (
+          <>
+            {data && (
+              <Pagination
+                handleClick={() => {}}
+                totalAmount={data.totalResults}
+                limit={+limit}
+                page={Number(page)}
+              />
+            )}
+            {data && (
+              <ArticleList
+                handleClick={() => dispatch(changeDetailsFlag(true))}
+                results={data.articles}
+              />
+            )}
+          </>
         )}
-        {data && <ArticleList handleClick={() => {}} results={data.articles} />}
         {error && <p>Error in fetch </p>}
       </div>
       <div className="results__details">
@@ -106,39 +116,39 @@ const Results = (): ReactNode => {
       </div>
     </section>
   );
-
-  // return (
-  //   <ArticlesContext.Provider value={articles}>
-  //     <section className="results" data-testid="results">
-  //       {isLoading ? (
-  //         <Loader />
-  //       ) : (
-  //         <div className="results__left">
-  //           {articles && !!articles.length && (
-  //             <Pagination
-  //               handleClick={startLoadingResults}
-  //               totalAmount={Number(totalResults.current)}
-  //               limit={+limit}
-  //               page={Number(page)}
-  //             />
-  //           )}
-  //           {isLoadingResults ? (
-  //             <Loader />
-  //           ) : articles ? (
-  //             <ArticleList handleClick={startLoadingDetails} />
-  //           ) : (
-  //             <div>
-  //               <p>{fetchError.current?.name}</p>
-  //               <p>{fetchError.current?.message}</p>
-  //             </div>
-  //           )}
-  //         </div>
-  //       )}
-  //       <div className="results__details">
-  //         {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
-  //       </div>
-  //     </section>
-  //   </ArticlesContext.Provider>
-  // );
 };
+// return (
+//   <ArticlesContext.Provider value={articles}>
+//     <section className="results" data-testid="results">
+//       {isLoading ? (
+//         <Loader />
+//       ) : (
+//         <div className="results__left">
+//           {articles && !!articles.length && (
+//             <Pagination
+//               handleClick={startLoadingResults}
+//               totalAmount={Number(totalResults.current)}
+//               limit={+limit}
+//               page={Number(page)}
+//             />
+//           )}
+//           {isLoadingResults ? (
+//             <Loader />
+//           ) : articles ? (
+//             <ArticleList handleClick={startLoadingDetails} />
+//           ) : (
+//             <div>
+//               <p>{fetchError.current?.name}</p>
+//               <p>{fetchError.current?.message}</p>
+//             </div>
+//           )}
+//         </div>
+//       )}
+//       <div className="results__details">
+//         {isLoadingResults ? '' : isLoadingDetails ? <Loader /> : <Outlet />}
+//       </div>
+//     </section>
+//   </ArticlesContext.Provider>
+// );
+
 export default Results;
