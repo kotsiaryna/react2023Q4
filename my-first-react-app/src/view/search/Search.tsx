@@ -1,27 +1,29 @@
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PageLimit from './PageLimit';
 import './search.scss';
-// import { SearchValueContext } from '../../context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { changeSearch } from '../../store/searchSlice';
+import { loadSearchValue, saveSearchValue } from '../../utils/localStorageUtils';
+import { State } from '../../store/store';
 
 const Search = (): ReactNode => {
-  const localValue = localStorage.getItem('inputValue') || JSON.stringify('');
-  const [searchValue, setSearchValue] = useState(JSON.parse(localValue));
+  const [searchValue, setSearchValue] = useState(loadSearchValue() || '');
 
-  const limit = useLocation().search.split('=').at(-1) || '10';
-  let link: string = `/${searchValue}/1?limit=${limit}`;
-
-  // const { setSearchContextValue } = useContext(SearchValueContext);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const saveSearchValue = () => {
-    dispatch(changeSearch(searchValue));
-    link = `/${searchValue}/1?limit=${limit}`;
+
+  const limit = useSelector((state: State) => state.itemsPerPage.value);
+
+  const handleSearchValue = () => {
+    if (searchValue.trim()) {
+      dispatch(changeSearch(searchValue));
+      navigate(`/${searchValue}/1?limit=${limit}`);
+    }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('inputValue', JSON.stringify(e.target.value));
+    saveSearchValue(e.target.value);
     setSearchValue(e.target.value);
   };
 
@@ -34,13 +36,13 @@ const Search = (): ReactNode => {
           type="text"
           className="search__input"
           value={searchValue}
+          placeholder="Type something..."
           onChange={handleInputChange}
         ></input>
-        <Link to={link}>
-          <button className="search__btn" onClick={saveSearchValue}>
-            Search
-          </button>
-        </Link>
+
+        <button className="search__btn" onClick={handleSearchValue}>
+          Search
+        </button>
       </div>
     </section>
   );

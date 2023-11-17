@@ -11,7 +11,6 @@ type Props = {
 };
 
 function Pagination(props: Props) {
-  // TODO add disabled classes on last pages
   const { handleClick, totalAmount, limit, page } = props;
   const { search } = useParams();
   const [curPage, setCurPage] = useState(page);

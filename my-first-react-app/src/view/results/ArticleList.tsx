@@ -1,14 +1,10 @@
 import Article from './Article';
-
 import { IArticle } from '../../types';
-// import { useDetailedNewsQuery } from '../../apiRTK';
 
-type Props = { handleClick: (index: number) => void; results: IArticle[] };
+type Props = { results: IArticle[] };
 
 const ArticleList = (props: Props) => {
-  const { handleClick, results } = props;
-
-  // const { list } = useDetailedNewsQuery()
+  const { results } = props;
 
   if (results.length) {
     return (
@@ -22,7 +18,6 @@ const ArticleList = (props: Props) => {
               title={title}
               author={author}
               description={description}
-              handleClick={() => handleClick(index)}
             />
           );
         })}
