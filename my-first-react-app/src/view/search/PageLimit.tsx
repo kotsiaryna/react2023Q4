@@ -25,9 +25,7 @@ const PageLimit = () => {
       <select
         name="limit"
         id="limit"
-        onChange={(e) => {
-          changeLimit(e);
-        }}
+        onChange={changeLimit}
         defaultValue={limit.get('limit') || DEFAULT_LIMIT}
       >
         <option value={10}>10</option>

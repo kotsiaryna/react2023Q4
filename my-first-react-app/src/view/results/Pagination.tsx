@@ -16,23 +16,25 @@ function Pagination(props: Props) {
   const [curPage, setCurPage] = useState(page);
 
   const handleBackClick: MouseEventHandler = (e) => {
-    if (page === 1) {
-      e.preventDefault();
-    } else {
+    // to prevent negative numbers in pages
+    if (page !== 1) {
       setCurPage(curPage - 1);
       handleClick();
+      return;
     }
+    e.preventDefault();
   };
 
   const handleForwardClick: MouseEventHandler = (e) => {
     const isLastPage = Number(page) * limit >= totalAmount;
-    if (isLastPage) {
-      e.preventDefault();
-    } else {
+    if (!isLastPage) {
       setCurPage(curPage + 1);
       handleClick();
+      return;
     }
+    e.preventDefault();
   };
+
   return (
     <div className="pagination">
       <Link
