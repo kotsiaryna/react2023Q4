@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Params } from '../api';
 import { Response } from '../types';
+
+type Params = {
+  search: string;
+  page: string;
+  limit: string;
+  id?: string;
+};
 
 export const newsApi = createApi({
   reducerPath: 'news',
