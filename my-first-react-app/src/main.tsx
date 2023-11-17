@@ -9,11 +9,13 @@ import store from './redux/store';
 
 const router = createBrowserRouter(routesConfig);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root');
+if (!root) throw new Error('no root element');
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
-export { routesConfig };
