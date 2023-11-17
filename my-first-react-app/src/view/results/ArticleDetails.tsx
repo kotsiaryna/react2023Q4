@@ -1,15 +1,15 @@
 import { Link, useParams } from 'react-router-dom';
-import { useDetailedNewsQuery } from '../../apiRTK';
+import { useDetailedNewsQuery } from '../../redux/apiRTK';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../store/store';
+import { State } from '../../redux/store';
 import Loader from './Loader';
 import { useEffect } from 'react';
-import { changeDetailsFlag } from '../../store/flagSlice';
+import { changeDetailsFlag } from '../../redux/flagSlice';
 
 function ArticleDetails() {
   const { page = '1', id } = useParams();
-  const search = useSelector((state: State) => state.searchValue.value);
-  const limit = useSelector((state: State) => state.itemsPerPage.value);
+  const search = useSelector((state: State) => state.searchValue);
+  const limit = useSelector((state: State) => state.itemsPerPage);
   const {
     data: article,
     isFetching,

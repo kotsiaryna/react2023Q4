@@ -2,11 +2,11 @@ import { ReactNode } from 'react';
 import { IArticle } from '../../types';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { State } from '../../store/store';
+import { State } from '../../redux/store';
 
 const Article = (props: IArticle): ReactNode => {
   const { title, author, index } = props;
-  const limit = useSelector((state: State) => state.itemsPerPage.value);
+  const limit = useSelector((state: State) => state.itemsPerPage);
 
   return (
     <Link to={`${index}?limit=${limit}`} data-testid={`article${index}`}>

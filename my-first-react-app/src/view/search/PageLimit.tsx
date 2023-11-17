@@ -2,13 +2,13 @@ import React, { ChangeEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import './pageLimit.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeItemsPerPage } from '../../store/itemsPerPageSlice';
-import { State } from '../../store/store';
+import { changeItemsPerPage } from '../../redux/itemsPerPageSlice';
+import { State } from '../../redux/store';
 
 const PageLimit = () => {
   const [limit] = useSearchParams();
   const navigate = useNavigate();
-  const search = useSelector((state: State) => state.searchValue.value);
+  const search = useSelector((state: State) => state.searchValue);
 
   const dispatch = useDispatch();
 

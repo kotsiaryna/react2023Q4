@@ -6,14 +6,14 @@ import Loader from './Loader';
 import ArticleList from './ArticleList';
 import './results.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../store/store';
-import { useGetNewsQuery } from '../../apiRTK';
-import { changeResultsFlag } from '../../store/flagSlice';
+import { State } from '../../redux/store';
+import { useGetNewsQuery } from '../../redux/apiRTK';
+import { changeResultsFlag } from '../../redux/flagSlice';
 
 const Results = (): ReactNode => {
   const { page } = useParams();
-  const search = useSelector((state: State) => state.searchValue.value);
-  const limit = useSelector((state: State) => state.itemsPerPage.value);
+  const search = useSelector((state: State) => state.searchValue);
+  const limit = useSelector((state: State) => state.itemsPerPage);
   const isLoadingResults = useSelector((state: State) => state.flags.isLoadingResults);
 
   const { data, isFetching, error } = useGetNewsQuery({ search, limit, page: page || '1' });

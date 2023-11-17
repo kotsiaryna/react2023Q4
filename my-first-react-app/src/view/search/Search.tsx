@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import PageLimit from './PageLimit';
 import './search.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSearch } from '../../store/searchSlice';
+import { changeSearch } from '../../redux/searchSlice';
 import { loadSearchValue, saveSearchValue } from '../../utils/localStorageUtils';
-import { State } from '../../store/store';
+import { State } from '../../redux/store';
 
 const Search = (): ReactNode => {
   const [searchValue, setSearchValue] = useState(loadSearchValue() || '');
@@ -13,12 +13,12 @@ const Search = (): ReactNode => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const limit = useSelector((state: State) => state.itemsPerPage.value);
+  const limit = useSelector((state: State) => state.itemsPerPage);
 
   const handleSearchValue = () => {
     if (searchValue.trim()) {
-      dispatch(changeSearch(searchValue));
-      navigate(`/${searchValue}/1?limit=${limit}`);
+      dispatch(changeSearch(searchValue.trim()));
+      navigate(`/${searchValue.trim()}/1?limit=${limit}`);
     }
   };
 
