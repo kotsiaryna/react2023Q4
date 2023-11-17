@@ -9,14 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../redux/store';
 import { useGetNewsQuery } from '../../redux/apiRTK';
 import { changeResultsFlag } from '../../redux/flagSlice';
+import { DEFAULT_PAGE } from '../../const';
 
 const Results = (): ReactNode => {
-  const { page } = useParams();
+  const { page = DEFAULT_PAGE } = useParams();
   const search = useSelector((state: State) => state.searchValue);
   const limit = useSelector((state: State) => state.itemsPerPage);
   const isLoadingResults = useSelector((state: State) => state.flags.isLoadingResults);
 
-  const { data, isFetching, error } = useGetNewsQuery({ search, limit, page: page || '1' });
+  const { data, isFetching, error } = useGetNewsQuery({ search, limit, page });
 
   const dispatch = useDispatch();
   useEffect(() => {

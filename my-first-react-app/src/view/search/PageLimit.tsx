@@ -4,6 +4,7 @@ import './pageLimit.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeItemsPerPage } from '../../redux/itemsPerPageSlice';
 import { State } from '../../redux/store';
+import { DEFAULT_LIMIT } from '../../const';
 
 const PageLimit = () => {
   const [limit] = useSearchParams();
@@ -27,7 +28,7 @@ const PageLimit = () => {
         onChange={(e) => {
           changeLimit(e);
         }}
-        defaultValue={(limit.get('limit') || 10).toString()}
+        defaultValue={limit.get('limit') || DEFAULT_LIMIT}
       >
         <option value={10}>10</option>
         <option value={5}>5</option>

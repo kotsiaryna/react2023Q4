@@ -4,11 +4,12 @@ import PageLimit from './PageLimit';
 import './search.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSearch } from '../../redux/searchSlice';
-import { loadSearchValue, saveSearchValue } from '../../utils/localStorageUtils';
+import { saveSearchValue } from '../../utils/localStorageUtils';
 import { State } from '../../redux/store';
+import { DEFAULT_SEARCH_VALUE } from '../../const';
 
 const Search = (): ReactNode => {
-  const [searchValue, setSearchValue] = useState(loadSearchValue() || '');
+  const [searchValue, setSearchValue] = useState(DEFAULT_SEARCH_VALUE);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

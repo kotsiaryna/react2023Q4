@@ -5,9 +5,10 @@ import { State } from '../../redux/store';
 import Loader from './Loader';
 import { useEffect } from 'react';
 import { changeDetailsFlag } from '../../redux/flagSlice';
+import { DEFAULT_PAGE } from '../../const';
 
 function ArticleDetails() {
-  const { page = '1', id } = useParams();
+  const { page = DEFAULT_PAGE, id } = useParams();
   const search = useSelector((state: State) => state.searchValue);
   const limit = useSelector((state: State) => state.itemsPerPage);
   const {
