@@ -2,17 +2,29 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
 import ArticleList from '../src/view/results/ArticleList';
-import { fakeArticles } from './mockData';
+import { fakeArticles } from './testUtils/mockData';
 import { MemoryRouter } from 'react-router-dom';
-import { ArticlesContext } from '../src/context';
+import { Provider } from 'react-redux';
+import { setupStore } from '../src/redux/store';
 
 describe('ArticleList (Card List)', () => {
+  const initialState = {
+    searchValue: '',
+    itemsPerPage: '10',
+    flags: {
+      isLoadingResults: false,
+      isLoadingPage: true,
+      isLoadingDetails: false,
+    },
+  };
+  const store = setupStore(initialState);
+
   it('renders the specified number of cards', () => {
     render(
       <MemoryRouter>
-        <ArticlesContext.Provider value={fakeArticles}>
-          <ArticleList handleClick={jest.fn()} />
-        </ArticlesContext.Provider>
+        <Provider store={store}>
+          <ArticleList results={fakeArticles} />
+        </Provider>
       </MemoryRouter>
     );
 
@@ -26,9 +38,9 @@ describe('ArticleList (Card List)', () => {
   it('renders "no matches" message if no cards are present', () => {
     render(
       <MemoryRouter>
-        <ArticlesContext.Provider value={null}>
-          <ArticleList handleClick={jest.fn()} />
-        </ArticlesContext.Provider>
+        <Provider store={store}>
+          <ArticleList results={[]} />
+        </Provider>
       </MemoryRouter>
     );
 
