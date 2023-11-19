@@ -1,5 +1,4 @@
 import { RouteObject } from 'react-router-dom';
-// import { articleRequest } from './api';
 import App from './view/App';
 import ErrorPage from './view/error/ErrorPage';
 import Page404 from './view/notFound/Page404';
@@ -19,7 +18,6 @@ const routesConfig: RouteObject[] = [
           {
             path: ':id',
             element: <ArticleDetails />,
-            // loader: articleRequest,
           },
         ],
       },
