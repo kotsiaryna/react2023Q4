@@ -20,23 +20,23 @@ const reducer = {
   [newsApi.reducerPath]: newsApi.reducer,
 };
 
-const preloadedState: State = {
+export const preloadedState: State = {
   searchValue: loadSearchValue() || '',
   itemsPerPage: '10',
   flags: {
     isLoadingResults: false,
-    isLoadingPage: false,
     isLoadingDetails: false,
   },
 };
+export const setupStore = (preloadedState?: State) => {
+  return configureStore({
+    reducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(newsApi.middleware),
+  });
+};
+const store = setupStore(preloadedState);
 
-const store = configureStore({
-  reducer,
-  preloadedState,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(newsApi.middleware),
-});
-
-// don't know if it necessary
 setupListeners(store.dispatch);
 
 export default store;

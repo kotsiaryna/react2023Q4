@@ -8,6 +8,7 @@ const itemsPerPageSlice = createSlice({
   reducers: {
     changeItemsPerPage(state, action: PayloadAction<string>) {
       state = action.payload;
+      return state;
     },
   },
 });
