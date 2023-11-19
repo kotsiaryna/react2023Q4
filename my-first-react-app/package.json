@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky install my-first-react-app/husky",
     "fix": "prettier --write",
-    "test": "jest --coverage --collectCoverageFrom='src/**'"
+    "test": "jest --coverage --collectCoverageFrom='src/**' --maxWorkers=1"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
