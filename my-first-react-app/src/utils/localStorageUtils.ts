@@ -1,9 +1,9 @@
-export const loadSearchValue = (): string | undefined => {
+export const loadSearchValue = (): string => {
   try {
     const savedSearchValue = localStorage.getItem('inputValue');
     return savedSearchValue ? JSON.parse(savedSearchValue) : '';
   } catch (err) {
-    return undefined;
+    return '';
   }
 };
 
