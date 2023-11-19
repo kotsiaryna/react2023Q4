@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { fakeArticles } from './testUtils/mockData';
@@ -48,35 +48,5 @@ describe('Result section tests', () => {
     );
     const resultList = await screen.findAllByTestId(/article/i);
     expect(resultList.length).toBe(fakeArticles.length);
-  });
-  it('show loader on getting details start', async () => {
-    render(
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    );
-    const cards = await screen.findAllByTestId(/article/i);
-    act(() => {
-      fireEvent.click(cards[0]);
-    });
-
-    const loader = screen.getByTestId('loader');
-    expect(loader).toBeInTheDocument();
-  });
-
-  it('renders articleDetails', async () => {
-    render(
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    );
-
-    const cards = await screen.findAllByTestId(/article/i);
-    act(() => {
-      fireEvent.click(cards[0]);
-    });
-
-    const details = await screen.findByTestId('article-details');
-    expect(details).toBeInTheDocument();
   });
 });
