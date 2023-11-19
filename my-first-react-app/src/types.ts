@@ -14,5 +14,4 @@ export interface IArticle {
   urlToImage?: string;
   publishedAt?: string;
   content?: string;
-  handleClick: () => void;
 }

@@ -33,12 +33,7 @@ const Results = (): ReactNode => {
         ) : (
           <>
             {data && (
-              <Pagination
-                handleClick={() => {}}
-                totalAmount={data.totalResults}
-                limit={+limit}
-                page={Number(page)}
-              />
+              <Pagination totalAmount={data.totalResults} limit={+limit} page={Number(page)} />
             )}
             {data && <ArticleList results={data.articles} />}
           </>
