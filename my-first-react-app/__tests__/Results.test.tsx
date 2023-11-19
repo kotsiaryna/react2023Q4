@@ -1,42 +1,82 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import Results from '../src/view/results/Results';
-import ArticleDetails from '../src/view/results/ArticleDetails';
-import { SearchValueContext } from '../src/context';
-import { fakeArticles } from './mockData';
+import { fakeArticles } from './testUtils/mockData';
+import { setupStore } from '../src/redux/store';
+import { Provider } from 'react-redux';
+import { server } from '../src/mocks/node';
+import routesConfig from '../src/routerConfig';
 
-global.fetch = jest.fn().mockImplementation(() =>
-  Promise.resolve({
-    json: () => Promise.resolve({ status: '200', totalResults: 30, articles: fakeArticles }),
-  })
-);
+const router = createMemoryRouter(routesConfig, {
+  initialEntries: ['/news/1'],
+});
 
-describe('Results - card list', () => {
-  it('renders list', async () => {
+const initialState = {
+  searchValue: '',
+  itemsPerPage: '10',
+  flags: {
+    isLoadingResults: false,
+    isLoadingPage: true,
+    isLoadingDetails: false,
+  },
+};
+
+const store = setupStore(initialState);
+
+describe('Result section tests', () => {
+  beforeAll(() => server.listen());
+  afterAll(() => server.close());
+  afterEach(() => server.resetHandlers());
+
+  it('shows loader while getting cards', async () => {
     render(
-      <SearchValueContext.Provider
-        value={{ searchContextValue: 'test', setSearchContextValue: jest.fn() }}
-      >
-        <Routes>
-          <Route path="/" element={<Results />} />
-          <Route path="/:id" element={<ArticleDetails />} />
-        </Routes>
-      </SearchValueContext.Provider>,
-      { wrapper: MemoryRouter }
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     );
 
-    const resultSection = screen.getByTestId('results');
-    expect(resultSection).toBeInTheDocument();
+    const loader = screen.getByTestId('loader');
+    expect(loader).toBeInTheDocument();
+  });
+
+  it('shows proper amount of cards after fetching', async () => {
+    render(
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    );
+    const resultList = await screen.findAllByTestId(/article/i);
+    expect(resultList.length).toBe(fakeArticles.length);
+  });
+  it('show loader on getting details start', async () => {
+    render(
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    );
+    const cards = await screen.findAllByTestId(/article/i);
+    act(() => {
+      fireEvent.click(cards[0]);
+    });
 
     const loader = screen.getByTestId('loader');
-
     expect(loader).toBeInTheDocument();
+  });
 
-    const items = await screen.findAllByTestId(/article/i);
+  it('renders articleDetails', async () => {
+    render(
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    );
 
-    expect(items[0]).toBeInTheDocument();
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    const cards = await screen.findAllByTestId(/article/i);
+    act(() => {
+      fireEvent.click(cards[0]);
+    });
+
+    const details = await screen.findByTestId('article-details');
+    expect(details).toBeInTheDocument();
   });
 });
