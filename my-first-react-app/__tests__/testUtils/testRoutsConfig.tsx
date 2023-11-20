@@ -18,3 +18,10 @@ export const routesConfig = [
     element: <Page404 />,
   },
 ];
+
+export const detailsRoutesConfig = [
+  {
+    path: ':search/:page/:id',
+    element: <ArticleDetails />,
+  },
+];
