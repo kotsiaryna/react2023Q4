@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import PageLimit from "./PageLimit";
 
  const Search = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ import { useRouter } from "next/router";
     Search
   </button>
 </div>
+<PageLimit/>
 </section>
 }
 export default Search;

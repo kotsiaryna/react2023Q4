@@ -8,10 +8,13 @@ import { useRouter } from 'next/router';
 const Article = (props: IArticle): ReactNode => {
   const { title, author, index } = props;
   const router = useRouter();
+  const {limit, search} = router.query;
+  const {pathname} = router
+  console.log(pathname);
    const handleClick = () => {
     router.push({
-      pathname: window.location.pathname,
-      query: {limit: 10, id: index }
+      pathname: `/${search}/1`,
+      query: {limit, id: index }
     })
   }
   return (
