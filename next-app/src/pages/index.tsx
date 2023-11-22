@@ -8,15 +8,7 @@ import { useRef } from 'react'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const router = useRouter();
-  const searchInput = {
-    value: ''
-  };
-  const handleClick = () => {
-    if(searchInput.value.trim()) {
-      router.push(`/${searchInput.value}/1`)
-    }
-  }
+ 
   return (
     <>
       <Head>
@@ -26,21 +18,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-      <section className="search">
-      <h1 className="search__heading">Looking for the latest news?</h1>
-      <div className="search__block">
-        <input
-          type="text"
-          className="search__input"
-          placeholder="Type something..."
-          onChange={(e) => {searchInput.value = e.target.value}}
-        ></input>
-
-        <button className="search__btn" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    </section>
+     
       </main>
     </>
   )
