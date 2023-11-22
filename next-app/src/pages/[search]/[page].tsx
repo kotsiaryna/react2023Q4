@@ -2,6 +2,8 @@ import type { InferGetServerSidePropsType, GetServerSideProps, GetServerSideProp
 import { Resp } from '../../../types'
 import ArticleList from '@/components/ArticleList'
 import ArticleDetails from '@/components/ArticleDetails'
+import Pagination from '@/components/Pagination'
+import { useRouter } from 'next/router'
 
 
 // This gets called on every request
@@ -20,9 +22,11 @@ export const getServerSideProps = (async (context: GetServerSidePropsContext): P
 
 export default function ArticleListWrapper({data}: InferGetServerSidePropsType<typeof getServerSideProps> ) {
   // Render data...
-  const articles = data.articles;
-  console.log(articles)
+  const {articles, totalResults, id } = data;
+  const router = useRouter()
+
   return <>
+   <Pagination totalAmount={totalResults} query={router.query} />
    <ArticleList results={articles}/>
    {data.id && <ArticleDetails article={articles[Number(data.id)]}/>}
   </>
