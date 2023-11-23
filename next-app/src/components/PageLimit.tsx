@@ -1,19 +1,17 @@
-import { useRouter } from 'next/router';
-import React, { ChangeEvent } from 'react';
-
-
+import { useRouter } from "next/router";
+import React, { ChangeEvent } from "react";
 
 const PageLimit = () => {
- const router = useRouter();
-  const {search, limit} = router.query;
-  
+  const router = useRouter();
+  const { search, limit } = router.query;
+
   const changeLimit = (e: ChangeEvent<HTMLSelectElement>) => {
     const limit = e.target.value;
-  
-   router.push({
-    pathname: `/${search}/1`,
-    query: {limit}
-   })
+
+    router.push({
+      pathname: `/${search}/1`,
+      query: { limit },
+    });
   };
 
   return (

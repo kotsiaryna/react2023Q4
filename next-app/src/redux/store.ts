@@ -8,9 +8,10 @@ const setupStore = () => {
     reducer: {
       [newsApi.reducerPath]: newsApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(newsApi.middleware),
-  })
-}
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(newsApi.middleware),
+  });
+};
 
 type AppStore = ReturnType<typeof setupStore>;
 type RootState = ReturnType<AppStore["getState"]>;

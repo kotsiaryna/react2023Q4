@@ -1,12 +1,13 @@
-import Article from './Article';
-import { IArticle } from '../../types';
+import Article from "./Article";
+import { IArticle } from "../../types";
 
 type Props = { results: IArticle[] };
 
 const ArticleList = (props: Props) => {
- const {results} = props;
- 
-  if (!results.length) return <div className="results__no-results">No matches</div>;
+  const { results } = props;
+
+  if (!results.length)
+    return <div className="results__no-results">No matches</div>;
   return (
     <div className="results__items">
       {results.map((res, index) => {
