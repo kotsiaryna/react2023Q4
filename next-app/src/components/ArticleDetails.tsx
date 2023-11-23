@@ -1,10 +1,14 @@
+import { useRouter } from 'next/router';
 import { IArticle } from '../../types';
+import Link from 'next/link';
 
 type Props = {
   article: IArticle
 }
 function ArticleDetails(props: Props) {
   const { article } = props;
+  const router = useRouter()
+  const {search, page, limit} = router.query
   
   return (
     <>
@@ -20,9 +24,9 @@ function ArticleDetails(props: Props) {
         </div>
      
       {/* {isError && <p>Error in fetch </p>} */}
-      {/* <Link to={`/${search}/${page}?limit=${limit}`} className="results__closeBtn">
+      <Link href={`/${search}/${page}?limit=${limit}`} className="results__closeBtn">
         X
-      </Link> */}
+      </Link>
     </>
   );
 }
