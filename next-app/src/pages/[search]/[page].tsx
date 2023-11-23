@@ -4,32 +4,43 @@ import ArticleList from '@/components/ArticleList'
 import ArticleDetails from '@/components/ArticleDetails'
 import Pagination from '@/components/Pagination'
 import { useRouter } from 'next/router'
+import { wrapper } from '@/redux/store'
+import { Content } from 'next/font/google'
+import { getNews, getRunningQueriesThunk, useGetNewsQuery } from '@/redux/api'
+import { skipToken } from '@reduxjs/toolkit/query'
+import Loader from '@/components/Loader'
 
 
-// This gets called on every request
-export const getServerSideProps = (async (context: GetServerSidePropsContext): Promise<{props:{data: Resp}}> => {
-  const { search, page, limit, id} = context.query
-
-  const res = await fetch(`https://newsapi.org/v2/top-headlines?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`)
-  const data: Resp = await res.json()
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const { search, page, limit, id} = context.query; 
  
-  // Pass data to the page via props
-  if(id) {
-    data.id = id.toString();
+  if(typeof search === 'string' && typeof page === 'string' && typeof limit === 'string') {
+    store.dispatch(getNews.initiate({search, page, limit}))
   }
-  return { props: { data: data } }
-}) satisfies GetServerSideProps<{data:Resp}>
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  return {
+    props: {},
+  };
+  
+})
 
-export default function ArticleListWrapper({data}: InferGetServerSidePropsType<typeof getServerSideProps> ) {
-  // Render data...
-  const {articles, totalResults, id } = data;
+export default function ArticleListWrapper() { 
   const router = useRouter()
+  const { search, page, limit, id} = router.query; 
+
+  const result = useGetNewsQuery((typeof search === 'string' && typeof page === 'string' && typeof limit === 'string' ) ? {search, limit, page} : skipToken, {skip: router.isFallback})
+
+  const {data, isLoading, error } = result
+  const {articles, totalResults } = data;
+  console.log(isLoading)
 
   return <>
+  {isLoading && <p>Loading....</p> }
    <Pagination totalAmount={totalResults} query={router.query} />
    <ArticleList results={articles}/>
-   {data.id && <ArticleDetails article={articles[Number(data.id)]}/>}
+   {id && <ArticleDetails article={articles[Number(id)]}/>}
   </>
  
 }
+
  
