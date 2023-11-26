@@ -9,7 +9,6 @@ import styles from '@/styles/article.module.scss';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const { search, page, limit } = context.query;
-  console.log(search, page, limit);
 
   if (typeof search === 'string' && typeof page === 'string' && typeof limit === 'string') {
     store.dispatch(getNews.initiate({ search, page, limit }));
