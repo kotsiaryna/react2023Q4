@@ -1,7 +1,5 @@
 import { newsApi } from '@/redux/api';
 import { configureStore } from '@reduxjs/toolkit';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query';
-import { HYDRATE } from 'next-redux-wrapper';
 
 export const fakeArticles = [
   {
@@ -68,34 +66,9 @@ export const mockRequest = {
   articles: fakeArticles,
 };
 
-type Params = {
-  search: string;
-  page: string;
-  limit: string;
-  id?: string;
-};
-
-const mockApi = createApi({
-  reducerPath: 'news',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://newsapi.org/v2/top-headlines',
-  }),
-  extractRehydrationInfo(action, { reducerPath }) {
-    if (action.type === HYDRATE) {
-      return action.payload[reducerPath];
-    }
-  },
-  endpoints: (builder) => ({
-    getNews: builder.query({
-      query: ({ search, page, limit }: Params) =>
-        `?q=${search}&pageSize=${limit}&page=${page}&apiKey=a6748dc91b9e4f7a8af5cc41a1090947`,
-    }),
-  }),
-});
-
 export const mockStore = configureStore({
   reducer: {
-    [newsApi.reducerPath]: mockApi.reducer,
+    [newsApi.reducerPath]: newsApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(newsApi.middleware),
 });
