@@ -1,7 +1,8 @@
-import { useRouter } from "next/router";
-import { IArticle } from "../../types";
-import Link from "next/link";
-import Image from "next/image";
+import { useRouter } from 'next/router';
+import { IArticle } from '../../types';
+import Link from 'next/link';
+import Image from 'next/image';
+import styles from '@/styles/article.module.scss';
 
 type Props = {
   article: IArticle;
@@ -13,33 +14,23 @@ function ArticleDetails(props: Props) {
 
   return (
     <>
-      <div className="details__inner" data-testid="article-details">
+      <div className={styles.results__details} data-testid="article-details">
         {article.urlToImage && (
-          <Image
-            src={article.urlToImage}
-            alt="image"
-            width={400}
-            height={600}
-          />
+          <Image src={article.urlToImage} alt="image" width={200} height={300} />
         )}
+
         <h3>{article.title}</h3>
         <p>{article.description}</p>
         <p>{article.content}</p>
         <p>{article.author}</p>
-        <a
-          className="details__link"
-          href={article.url}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a className={styles.details__link} href={article.url} target="_blank" rel="noreferrer">
           Read more in origin
         </a>
       </div>
 
-      {/* {isError && <p>Error in fetch </p>} */}
       <Link
         href={`/${search}/${page}?limit=${limit}`}
-        className="results__closeBtn"
+        className={styles.results__details__closeBtn}
       >
         X
       </Link>

@@ -1,6 +1,7 @@
-import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import { MouseEventHandler } from "react";
+import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
+import { MouseEventHandler } from 'react';
+import styles from '@/styles/pagination.module.scss';
 
 type Props = {
   totalAmount: number;
@@ -15,8 +16,7 @@ function Pagination(props: Props) {
   const router = useRouter();
 
   const handleBackClick: MouseEventHandler = (e) => {
-    console.log(page);
-    if (page === "1") {
+    if (page === '1') {
       e.preventDefault();
       return;
     }
@@ -45,7 +45,7 @@ function Pagination(props: Props) {
   };
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       <button type="button" onClick={handleBackClick}>
         BACK
       </button>

@@ -1,15 +1,15 @@
-import Article from "./Article";
-import { IArticle } from "../../types";
+import Article from './Article';
+import { IArticle } from '../../types';
+import styles from '@/styles/article.module.scss';
 
 type Props = { results: IArticle[] };
 
 const ArticleList = (props: Props) => {
   const { results } = props;
 
-  if (!results.length)
-    return <div className="results__no-results">No matches</div>;
+  if (!results.length) return <div className={styles.results__no_results}>No matches</div>;
   return (
-    <div className="results__items">
+    <div className={styles.results__items}>
       {results.map((res, index) => {
         const { title, author, description } = res;
         return (
