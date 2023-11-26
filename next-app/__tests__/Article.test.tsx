@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Article from '@/components/Article';
-import { fakeArticles } from './mockData';
+import { fakeArticles } from './mocks/mockData';
 import { useRouter } from 'next/router';
 
 jest.mock('next/router', () => ({

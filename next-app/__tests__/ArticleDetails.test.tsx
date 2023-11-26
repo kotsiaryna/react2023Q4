@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { fakeArticles } from './mockData';
+import { fakeArticles } from './mocks/mockData';
 import { useRouter } from 'next/router';
 import ArticleDetails from '@/components/ArticleDetails';
 
