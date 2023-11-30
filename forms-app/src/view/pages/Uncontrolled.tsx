@@ -10,9 +10,9 @@ import {
   nameSchema,
   passSchema,
 } from '../../utils/yupSchema';
-import { ValidationError } from 'yup';
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
+import { validateFileSize, validateFileType } from '../../utils/fileValidation';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -25,15 +25,20 @@ const UncontrolledForm = () => {
   const pass1Ref = useRef({ value: '', isError: false });
   const pass2Ref = useRef({ value: '', isError: false });
   const tcRef = useRef({ value: false, isError: false });
+  const imgRef: React.MutableRefObject<{
+    value: null | File;
+    isError: boolean;
+  }> = useRef({ value: null, isError: false });
 
-  const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef];
+  const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef, imgRef];
 
-  const fileInput = useRef<HTMLInputElement>(null);
+  // const fileInput = useRef<HTMLInputElement>(null);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    // const file = (fileInput.current?.files as FileList)[0];
+    const file = imgRef.current.value;
+    console.log(file);
 
     const data: UncontrolledFormState = {
       name: nameRef.current.value,
@@ -44,7 +49,7 @@ const UncontrolledForm = () => {
       tc: !!formData.get('tc'),
       // file: file,
     };
-    console.log(data);
+
     try {
       const res = await Promise.all([
         await nameSchema.isValid(nameRef.current.value),
@@ -60,23 +65,26 @@ const UncontrolledForm = () => {
           refs[i].current.isError = false;
         }
       });
-      pass2Ref.current.isError =
-        pass1Ref.current.value !== pass2Ref.current.value;
-
-      tcRef.current.isError = !data.tc;
-
-      const hasError = refs.find((ref) => ref.current.isError);
-
-      if (!hasError) {
-        dispatch(saveData(data));
-        navigate('/');
-      } else {
-        forceUpdate();
-      }
     } catch (error) {
-      if (error instanceof ValidationError) {
-        console.log(error.errors);
-      }
+      console.log(error);
+    }
+    pass2Ref.current.isError =
+      pass1Ref.current.value !== pass2Ref.current.value;
+
+    tcRef.current.isError = !data.tc;
+
+    imgRef.current.isError = !(
+      validateFileSize(imgRef.current.value) &&
+      validateFileType(imgRef.current.value)
+    );
+
+    const hasError = refs.find((ref) => ref.current.isError);
+
+    if (!hasError) {
+      dispatch(saveData(data));
+      navigate('/');
+    } else {
+      forceUpdate();
     }
   };
 
@@ -129,7 +137,6 @@ const UncontrolledForm = () => {
           onInput={(e) => (emailRef.current.value = e.currentTarget.value)}
         />
         <p className="form__item_hasError">
-          {' '}
           {emailRef.current.isError && 'Incorrect email'}
         </p>
       </label>
@@ -182,10 +189,23 @@ const UncontrolledForm = () => {
         </p>
       </label>
 
-      <div className="input">
-        <label htmlFor="image">Attach Image</label>
-        <input type="file" id="image" name="image" ref={fileInput} />
-      </div>
+      <label className="form__item" htmlFor="image">
+        Attach Image
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept=".png, .jpeg"
+          onInput={(e) => {
+            if (e.currentTarget.files) {
+              imgRef.current.value = e.currentTarget.files[0];
+            }
+          }}
+        />
+        <p className="form__item_hasError">
+          {imgRef.current.isError && 'png or jpeg, max size 4Mb'}
+        </p>
+      </label>
       <InputCountry />
       <button type="submit">Submit</button>
     </form>
