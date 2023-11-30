@@ -3,11 +3,12 @@ import { UncontrolledFormState } from '../types';
 
 const initialState: UncontrolledFormState = {
   name: '',
-  age: '',
+  age: 1,
   email: '',
   password: '',
   gender: 'male',
   tc: false,
+  file: '',
 };
 
 const uncontrolledSlice = createSlice({
@@ -17,9 +18,22 @@ const uncontrolledSlice = createSlice({
     saveData: (
       state: UncontrolledFormState,
       action: PayloadAction<UncontrolledFormState>
-    ) => action.payload,
+    ) => {
+      const file = state.file;
+      state = action.payload;
+      state.file = file;
+
+      return state;
+    },
+    saveImg64: (
+      state: UncontrolledFormState,
+      action: PayloadAction<string>
+    ) => {
+      state.file = action.payload;
+      return state;
+    },
   },
 });
 
-export const { saveData } = uncontrolledSlice.actions;
+export const { saveData, saveImg64 } = uncontrolledSlice.actions;
 export default uncontrolledSlice.reducer;

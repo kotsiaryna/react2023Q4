@@ -2,7 +2,7 @@ import InputCountry from '../components/InputCountry';
 import { FormEventHandler, useRef } from 'react';
 import { UncontrolledFormState } from '../../types';
 import { useDispatch } from 'react-redux';
-import { saveData } from '../../redux/uncontrolledSlice';
+import { saveData, saveImg64 } from '../../redux/uncontrolledSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   ageSchema,
@@ -13,6 +13,7 @@ import {
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
 import { validateFileSize, validateFileType } from '../../utils/fileValidation';
+// import { encodeImage } from '../../utils/fileReader';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -32,13 +33,27 @@ const UncontrolledForm = () => {
 
   const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef, imgRef];
 
-  // const fileInput = useRef<HTMLInputElement>(null);
+  const handleFileInput: FormEventHandler<HTMLInputElement> = (e) => {
+    if (e.currentTarget.files) {
+      imgRef.current.value = e.currentTarget.files[0];
+      imgRef.current.isError = !(
+        validateFileSize(e.currentTarget.files[0]) &&
+        validateFileType(e.currentTarget.files[0])
+      );
+      const reader = new FileReader();
+      reader.readAsDataURL(e.currentTarget.files[0]);
+      reader.onloadend = () => {
+        const img64 = reader.result?.toString() || '';
+        if (!imgRef.current.isError) {
+          dispatch(saveImg64(img64));
+        }
+      };
+    }
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const file = imgRef.current.value;
-    console.log(file);
 
     const data: UncontrolledFormState = {
       name: nameRef.current.value,
@@ -47,7 +62,6 @@ const UncontrolledForm = () => {
       password: pass1Ref.current.value,
       gender: `${formData.get('gender')}`,
       tc: !!formData.get('tc'),
-      // file: file,
     };
 
     try {
@@ -73,14 +87,10 @@ const UncontrolledForm = () => {
 
     tcRef.current.isError = !data.tc;
 
-    imgRef.current.isError = !(
-      validateFileSize(imgRef.current.value) &&
-      validateFileType(imgRef.current.value)
-    );
-
     const hasError = refs.find((ref) => ref.current.isError);
 
     if (!hasError) {
+      console.log(data);
       dispatch(saveData(data));
       navigate('/');
     } else {
@@ -196,11 +206,7 @@ const UncontrolledForm = () => {
           id="image"
           name="image"
           accept=".png, .jpeg"
-          onInput={(e) => {
-            if (e.currentTarget.files) {
-              imgRef.current.value = e.currentTarget.files[0];
-            }
-          }}
+          onInput={handleFileInput}
         />
         <p className="form__item_hasError">
           {imgRef.current.isError && 'png or jpeg, max size 4Mb'}

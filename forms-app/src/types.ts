@@ -7,7 +7,7 @@ export type UncontrolledFormState = {
   gender: string;
   tc: boolean;
   country?: string; //TODO change to list of countries
-  file?: File;
+  file?: string;
 };
 
 export type StateType = {
