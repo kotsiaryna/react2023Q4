@@ -1,17 +1,19 @@
-import { Link, Outlet } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
+
+import { useSelector } from 'react-redux';
+import { StateType } from '../../types';
+import Card from '../components/Card';
 
 const Home = () => {
+  const uncontrolledFormData = useSelector(
+    (state: StateType) => state.uncontrolled
+  );
+  console.log(uncontrolledFormData);
   return (
-    <main>
-      <h1>{'Hello forms ;-)'}</h1>
-      <div>Home page</div>
-      <nav>
-        <Link to="/"> Back on main</Link>
-        <Link to="uncontrolled"> Form without control</Link>
-        <Link to="controlled"> Form with control</Link>
-      </nav>
-      <Outlet />
-    </main>
+    <div>
+      <h2>Home Page</h2>
+      <Card data={uncontrolledFormData} />
+    </div>
   );
 };
 
