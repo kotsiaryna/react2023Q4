@@ -2,7 +2,7 @@ import InputCountry from '../components/InputCountry';
 import { FormEventHandler, useRef } from 'react';
 import { UncontrolledFormState } from '../../types';
 import { useDispatch } from 'react-redux';
-import { saveData, saveImg64 } from '../../redux/uncontrolledSlice';
+import { saveData } from '../../redux/uncontrolledSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   ageSchema,
@@ -13,7 +13,6 @@ import {
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
 import { validateFileSize, validateFileType } from '../../utils/fileValidation';
-// import { encodeImage } from '../../utils/fileReader';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -33,20 +32,15 @@ const UncontrolledForm = () => {
 
   const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef, imgRef];
 
+  const dataF: UncontrolledFormState = {};
+
   const handleFileInput: FormEventHandler<HTMLInputElement> = (e) => {
     if (e.currentTarget.files) {
       imgRef.current.value = e.currentTarget.files[0];
-      imgRef.current.isError = !(
-        validateFileSize(e.currentTarget.files[0]) &&
-        validateFileType(e.currentTarget.files[0])
-      );
       const reader = new FileReader();
       reader.readAsDataURL(e.currentTarget.files[0]);
       reader.onloadend = () => {
-        const img64 = reader.result?.toString() || '';
-        if (!imgRef.current.isError) {
-          dispatch(saveImg64(img64));
-        }
+        dataF.file = reader.result?.toString();
       };
     }
   };
@@ -54,15 +48,12 @@ const UncontrolledForm = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-
-    const data: UncontrolledFormState = {
-      name: nameRef.current.value,
-      age: ageRef.current.value,
-      email: emailRef.current.value,
-      password: pass1Ref.current.value,
-      gender: `${formData.get('gender')}`,
-      tc: !!formData.get('tc'),
-    };
+    dataF.name = nameRef.current.value;
+    dataF.age = ageRef.current.value;
+    dataF.email = emailRef.current.value;
+    dataF.password = pass1Ref.current.value;
+    dataF.gender = `${formData.get('gender')}`;
+    dataF.tc = !!formData.get('tc');
 
     try {
       const res = await Promise.all([
@@ -85,13 +76,16 @@ const UncontrolledForm = () => {
     pass2Ref.current.isError =
       pass1Ref.current.value !== pass2Ref.current.value;
 
-    tcRef.current.isError = !data.tc;
+    tcRef.current.isError = !dataF.tc;
+    imgRef.current.isError = !(
+      validateFileSize(imgRef.current.value) &&
+      validateFileType(imgRef.current.value)
+    );
 
     const hasError = refs.find((ref) => ref.current.isError);
 
     if (!hasError) {
-      console.log(data);
-      dispatch(saveData(data));
+      dispatch(saveData(dataF));
       navigate('/');
     } else {
       forceUpdate();

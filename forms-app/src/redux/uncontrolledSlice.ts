@@ -18,13 +18,8 @@ const uncontrolledSlice = createSlice({
     saveData: (
       state: UncontrolledFormState,
       action: PayloadAction<UncontrolledFormState>
-    ) => {
-      const file = state.file;
-      state = action.payload;
-      state.file = file;
-
-      return state;
-    },
+    ) => action.payload,
+    // TODO delete as unused
     saveImg64: (
       state: UncontrolledFormState,
       action: PayloadAction<string>

@@ -8,6 +8,7 @@ type Props = {
 
 const Card = (props: Props) => {
   const { data } = props;
+  if (!data.name) return;
   return (
     <div>
       {Object.entries(data).map(([key, value], index) => {
