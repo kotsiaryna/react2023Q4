@@ -1,18 +1,18 @@
 import InputCountry from '../components/InputCountry';
 import { FormEventHandler, useRef } from 'react';
-import { FormsState } from '../../types';
 import { useDispatch } from 'react-redux';
 import { saveData } from '../../redux/formSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   ageSchema,
   emailSchema,
+  imageSchema,
   nameSchema,
   passSchema,
+  tcAcceptSchema,
 } from '../../utils/yupSchema';
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
-import { validateFileSize, validateFileType } from '../../utils/fileValidation';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -26,34 +26,24 @@ const UncontrolledForm = () => {
   const pass2Ref = useRef({ value: '', isError: false });
   const tcRef = useRef({ value: false, isError: false });
   const imgRef: React.MutableRefObject<{
-    value: null | File;
+    value: null | FileList;
     isError: boolean;
   }> = useRef({ value: null, isError: false });
 
-  const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef, imgRef];
-
-  const dataF: FormsState = {};
-
-  const handleFileInput: FormEventHandler<HTMLInputElement> = (e) => {
-    if (e.currentTarget.files) {
-      imgRef.current.value = e.currentTarget.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(e.currentTarget.files[0]);
-      reader.onloadend = () => {
-        dataF.file = reader.result?.toString();
-      };
-    }
-  };
+  const refs = [nameRef, ageRef, emailRef, pass1Ref, tcRef, imgRef, pass2Ref];
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    dataF.name = nameRef.current.value;
-    dataF.age = ageRef.current.value;
-    dataF.email = emailRef.current.value;
-    dataF.password = pass1Ref.current.value;
-    dataF.gender = `${formData.get('gender')}`;
-    dataF.tc = !!formData.get('tc');
+    const data = {
+      name: nameRef.current.value,
+      age: ageRef.current.value,
+      email: emailRef.current.value,
+      password: pass1Ref.current.value,
+      gender: `${formData.get('gender')}`,
+      tc: !!formData.get('tc'),
+      file: imgRef.current.value,
+    };
 
     // todo all validation with yup
     try {
@@ -62,6 +52,8 @@ const UncontrolledForm = () => {
         await ageSchema.isValid(ageRef.current.value),
         await emailSchema.isValid(emailRef.current.value),
         await passSchema.isValid(pass1Ref.current.value),
+        await tcAcceptSchema.isValid(data.tc),
+        await imageSchema.isValid(imgRef.current.value),
       ]);
 
       res.forEach((input, i) => {
@@ -75,19 +67,19 @@ const UncontrolledForm = () => {
       console.log(error);
     }
     pass2Ref.current.isError =
+      !pass2Ref.current.value ||
       pass1Ref.current.value !== pass2Ref.current.value;
-
-    tcRef.current.isError = !dataF.tc;
-    imgRef.current.isError = !(
-      validateFileSize(imgRef.current.value) &&
-      validateFileType(imgRef.current.value)
-    );
 
     const hasError = refs.find((ref) => ref.current.isError);
 
     if (!hasError) {
-      dispatch(saveData(dataF));
-      navigate('/');
+      const reader = new FileReader();
+      reader.readAsDataURL(imgRef.current.value![0]);
+      reader.onloadend = () => {
+        const dataToSave = { ...data, file: reader.result?.toString() };
+        dispatch(saveData(dataToSave));
+        navigate('/');
+      };
     } else {
       forceUpdate();
     }
@@ -201,10 +193,10 @@ const UncontrolledForm = () => {
           id="image"
           name="image"
           accept=".png, .jpeg"
-          onInput={handleFileInput}
+          onInput={(e) => (imgRef.current.value = e.currentTarget.files)}
         />
         <p className="form__item_hasError">
-          {imgRef.current.isError && 'png or jpeg, max size 4Mb'}
+          {imgRef.current.isError && 'Required, png or jpeg, max size 4Mb'}
         </p>
       </label>
       <InputCountry />

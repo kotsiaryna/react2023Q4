@@ -20,8 +20,13 @@ export const passSchema = string()
     /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/,
     ' Should contain 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character'
   );
+export const confirmPassSchema = string()
+  .required('Confirm your password')
+  .oneOf([ref('password1')], 'Passwords must match');
 
-// TODO try use it
+export const tcAcceptSchema = boolean()
+  .required()
+  .oneOf([true], 'TC should be accepted');
 export const imageSchema = mixed<FileList>()
   .required('Image is required')
   .test('type', 'Not a valid image type', (value) => {
@@ -40,11 +45,8 @@ export const formSchema: ObjectSchema<YupSchemaType> = object({
   age: ageSchema,
   email: emailSchema,
   password1: passSchema,
-  password2: string()
-    .required('Confirm your password')
-    .oneOf([ref('password1')], 'Passwords must match'),
+  password2: confirmPassSchema,
   gender: string().required().oneOf(['male', 'female']),
-  // tc: string().matches(/accepted/, 'Should be accepted'),
-  tc: boolean().required().oneOf([true], 'TC should be accepted'),
+  tc: tcAcceptSchema,
   file: imageSchema,
 });
