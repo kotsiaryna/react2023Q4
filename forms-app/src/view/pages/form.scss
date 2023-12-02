@@ -32,17 +32,17 @@
       width: 100%;
     }
 
-    &_hasError {
+    
+
+   
+  }
+&__item_hasError {
       margin-top: 5px;
       height: 30px;
        width: 100%;
       font-size: 0.7em;
            color: red;
     }
-
-   
-  }
-
   &__item.radio {
     justify-content: flex-start;
     gap: 15px;

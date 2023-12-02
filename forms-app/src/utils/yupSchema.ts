@@ -1,19 +1,50 @@
-import { string, number } from 'yup';
+import { string, number, object, ref, mixed, boolean, ObjectSchema } from 'yup';
+import { YupSchemaType } from '../types';
 
 export const nameSchema = string()
-  .required('Enter your name')
-  .matches(/^[A-Z][a-zA-Z0-9]*$/);
+  .required('Name is required')
+  .matches(/^[A-Z][a-zA-Z0-9]*$/, 'Should start with uppercase letter');
 
 export const ageSchema = number()
-  .required()
-  .positive()
-  .integer()
-  .typeError('Should be a positive number');
+  .required('Age is required')
+  .positive('Should be a positive number')
+  .integer('Age should be an integer')
+  .typeError('Number is required');
 export const emailSchema = string()
   .required('Enter e-mail')
-  .email('valid mail')
-  .typeError('Should be valid email');
+  .email('Should be a valid mail');
 
 export const passSchema = string()
-  .required()
-  .matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/, 'contain all the staff');
+  .required('Password is required')
+  .matches(
+    /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/,
+    ' Should contain 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character'
+  );
+
+// TODO try use it
+export const imageSchema = mixed<FileList>()
+  .required('Image is required')
+  .test('type', 'Not a valid image type', (value) => {
+    if (!value[0]) return;
+    return ['image/jpeg', 'image/png'].includes(value[0].type);
+  })
+
+  .test(
+    'size',
+    'Max allowed size is 4MB',
+    (value) => value && value[0] && value[0].size <= 4194304
+  );
+
+export const formSchema: ObjectSchema<YupSchemaType> = object({
+  name: nameSchema,
+  age: ageSchema,
+  email: emailSchema,
+  password1: passSchema,
+  password2: string()
+    .required('Confirm your password')
+    .oneOf([ref('password1')], 'Passwords must match'),
+  gender: string().required().oneOf(['male', 'female']),
+  // tc: string().matches(/accepted/, 'Should be accepted'),
+  tc: boolean().required().oneOf([true], 'TC should be accepted'),
+  file: imageSchema,
+});

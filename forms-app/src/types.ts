@@ -9,6 +9,30 @@ export type UncontrolledFormState = {
   file?: string;
 };
 
+export type TFormState = {
+  name?: string;
+  age?: number;
+  email?: string;
+  password1?: string;
+  password2?: string;
+  gender?: string;
+  tc?: boolean; // todo boolean in controlled form
+  // country?: string; //TODO change to list of countries
+  file?: string;
+};
+
+export type YupSchemaType = {
+  name: string;
+  age: number;
+  email: string;
+  password1: string;
+  password2: string;
+  gender: string;
+  tc: boolean;
+  // country?: string; //TODO change to list of countries
+  file: FileList;
+};
+
 export type StateType = {
   uncontrolled: UncontrolledFormState;
 };
