@@ -1,8 +1,7 @@
-// import { useSelector } from 'react-redux';
-
 import { useSelector } from 'react-redux';
 import { StateType } from '../../types';
 import Card from '../components/Card';
+import './home.scss';
 
 const Home = () => {
   const uncontrolledFormData = useSelector(
@@ -10,10 +9,12 @@ const Home = () => {
   );
   console.log(uncontrolledFormData);
   return (
-    <div>
+    <>
       <h2>Home Page</h2>
-      <Card data={uncontrolledFormData} />
-    </div>
+      <div className="cards-wrapper">
+        <Card data={uncontrolledFormData} />
+      </div>
+    </>
   );
 };
 

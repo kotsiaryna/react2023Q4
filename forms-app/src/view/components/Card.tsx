@@ -1,4 +1,5 @@
 import { UncontrolledFormState } from '../../types';
+import './card.scss';
 
 type Props = {
   // props: {
@@ -10,7 +11,7 @@ const Card = (props: Props) => {
   const { data } = props;
   if (!data.name) return;
   return (
-    <div>
+    <div className="card">
       {Object.entries(data).map(([key, value], index) => {
         if (key === 'file') {
           return <img key={index} src={`${value}`} width={300} alt="Preview" />;
