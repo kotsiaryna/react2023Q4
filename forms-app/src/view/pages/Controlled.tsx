@@ -2,7 +2,7 @@ import { Path, UseFormRegister, useForm } from 'react-hook-form';
 import { YupSchemaType } from '../../types';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { saveData } from '../../redux/uncontrolledSlice';
+import { saveData } from '../../redux/formSlice';
 import { formSchema } from '../../utils/yupSchema';
 import './form.scss';
 import { useNavigate } from 'react-router-dom';

@@ -1,10 +1,8 @@
-import { UncontrolledFormState } from '../../types';
+import { FormsState } from '../../types';
 import './card.scss';
 
 type Props = {
-  // props: {
-  data: UncontrolledFormState;
-  // };
+  data: FormsState;
 };
 
 const Card = (props: Props) => {

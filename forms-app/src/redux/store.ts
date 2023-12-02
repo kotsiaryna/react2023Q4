@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import uncontrolledSlice from './uncontrolledSlice';
+import formSlice from './formSlice';
 
 const store = configureStore({
   reducer: {
-    uncontrolled: uncontrolledSlice,
+    form: formSlice,
   },
 });
 

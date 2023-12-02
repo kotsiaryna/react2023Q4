@@ -1,8 +1,8 @@
 import InputCountry from '../components/InputCountry';
 import { FormEventHandler, useRef } from 'react';
-import { UncontrolledFormState } from '../../types';
+import { FormsState } from '../../types';
 import { useDispatch } from 'react-redux';
-import { saveData } from '../../redux/uncontrolledSlice';
+import { saveData } from '../../redux/formSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   ageSchema,
@@ -32,7 +32,7 @@ const UncontrolledForm = () => {
 
   const refs = [nameRef, ageRef, emailRef, pass1Ref, pass2Ref, tcRef, imgRef];
 
-  const dataF: UncontrolledFormState = {};
+  const dataF: FormsState = {};
 
   const handleFileInput: FormEventHandler<HTMLInputElement> = (e) => {
     if (e.currentTarget.files) {
@@ -55,6 +55,7 @@ const UncontrolledForm = () => {
     dataF.gender = `${formData.get('gender')}`;
     dataF.tc = !!formData.get('tc');
 
+    // todo all validation with yup
     try {
       const res = await Promise.all([
         await nameSchema.isValid(nameRef.current.value),

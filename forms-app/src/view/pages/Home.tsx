@@ -4,15 +4,15 @@ import Card from '../components/Card';
 import './home.scss';
 
 const Home = () => {
-  const uncontrolledFormData = useSelector(
-    (state: StateType) => state.uncontrolled
-  );
-  console.log(uncontrolledFormData);
+  const formsData = useSelector((state: StateType) => state.form);
+
   return (
     <>
       <h2>Home Page</h2>
       <div className="cards-wrapper">
-        <Card data={uncontrolledFormData} />
+        {formsData.map((data, index) => (
+          <Card key={index} data={data} />
+        ))}
       </div>
     </>
   );
