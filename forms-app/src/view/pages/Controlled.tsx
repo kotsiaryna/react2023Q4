@@ -36,17 +36,12 @@ const ControlledForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const countries = useSelector((state: StateType) => state.countries);
-  console.log(errors);
-  console.log('isDirty   ' + isDirty);
-  console.log('isValid   ' + isValid);
-
   return (
     <>
       <h2>Form with control (RHF)</h2>
       <form
         className="form"
         onSubmit={handleSubmit((data) => {
-          console.log(data);
           const reader = new FileReader();
           reader.readAsDataURL(data.file[0]);
           reader.onloadend = () => {

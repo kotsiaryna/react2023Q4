@@ -31,8 +31,8 @@ function AutoCompleteRHF({ countries, label, register, required }: Props) {
       <label htmlFor="count">Country</label>
       <input
         {...register(label, { required })}
-        // type="text"
-        // id="count"
+        type="text"
+        id="count"
         onChange={handleInputChange}
         value={value}
         autoComplete="off"
