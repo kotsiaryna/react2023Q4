@@ -4,7 +4,7 @@ import countries from '../redux/countries';
 
 export const nameSchema = string()
   .required('Name is required')
-  .matches(/^[A-Z][a-zA-Z0-9]*$/, 'Should start with uppercase letter');
+  .matches(/^[A-Z][a-zA-Z0-9\s]*$/, 'Should start with uppercase letter');
 
 export const ageSchema = number()
   .required('Age is required')
@@ -54,5 +54,5 @@ export const formSchema: ObjectSchema<DataType> = object({
   gender: string().required().oneOf(['male', 'female']),
   tc: tcAcceptSchema,
   file: imageSchema,
-  country: countrySchema,
+  country: string().required('Country is required'),
 });

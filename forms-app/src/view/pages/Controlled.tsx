@@ -1,11 +1,12 @@
 import { Path, UseFormRegister, useForm } from 'react-hook-form';
-import { DataType, FormsState } from '../../types';
-import { useDispatch } from 'react-redux';
+import { DataType, FormsState, StateType } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { saveData } from '../../redux/formSlice';
 import { formSchema } from '../../utils/yupSchema';
 import { useNavigate } from 'react-router-dom';
 import './form.scss';
+import AutoCompleteRHF from '../components/AutoCompleteRHF';
 
 type InputProps = {
   label: Path<DataType>;
@@ -29,11 +30,15 @@ const ControlledForm = () => {
     handleSubmit,
     formState: { errors, isDirty, isValid },
   } = useForm<DataType>({
-    mode: 'onChange',
+    mode: 'all',
     resolver: yupResolver<DataType>(formSchema),
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const countries = useSelector((state: StateType) => state.countries);
+  console.log(errors);
+  console.log('isDirty   ' + isDirty);
+  console.log('isValid   ' + isValid);
 
   return (
     <>
@@ -41,6 +46,7 @@ const ControlledForm = () => {
       <form
         className="form"
         onSubmit={handleSubmit((data) => {
+          console.log(data);
           const reader = new FileReader();
           reader.readAsDataURL(data.file[0]);
           reader.onloadend = () => {
@@ -95,6 +101,13 @@ const ControlledForm = () => {
           labelName="Repeat password:"
         />
         <p className="form__item_hasError">{errors.password2?.message}</p>
+        <AutoCompleteRHF
+          countries={countries}
+          label={'country'}
+          register={register}
+          required={true}
+        />
+        <p className="form__item_hasError">{errors.country?.message}</p>
 
         <div className="form__item radio">
           <legend>Gender:</legend>
