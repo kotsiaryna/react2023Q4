@@ -8,15 +8,18 @@ type Props = {
 const Card = (props: Props) => {
   const { data } = props;
   if (!data.name) return;
+  const { name, age, email, password1, gender, file } = data;
   return (
     <div className="card">
-      {Object.entries(data).map(([key, value], index) => {
-        if (key === 'file') {
-          return <img key={index} src={`${value}`} width={300} alt="Preview" />;
-        } else {
-          return <p key={index}>{`${key} : ${value}`}</p>;
-        }
-      })}
+      <img src={`${file}`} width={300} alt="Preview" />
+      <ul>
+        <li>{`Name: ${name}`}</li>
+        <li>{`Age: ${age}`}</li>
+        <li>{`Email: ${email}`}</li>
+        <li>{`Password: ${password1}`}</li>
+        <li>{`Gender: ${gender}`}</li>
+        <li>T&C: accepted</li>
+      </ul>
     </div>
   );
 };

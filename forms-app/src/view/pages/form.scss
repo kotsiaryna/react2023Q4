@@ -1,7 +1,12 @@
+h2 {
+  margin-bottom: 30px;
+  letter-spacing: 0.05em;
+}
+
 .form {
   font-size: 1.3em;
-  width: 500px;
-  padding: 15px;
+  width: 550px;
+  padding: 40px 30px;
 
 
   display: flex;
@@ -10,6 +15,7 @@
   align-items: flex-start;
 
   border: 1px solid black;
+  border-radius: 10px;
 
   &__item {
     width: 100%;
@@ -17,13 +23,15 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
 
     input {
       width: 60%;
       height: 30px;
     }
     
-    input[type='radio'] {
+    input[type='radio'], 
+    input[type='checkbox'] {
       width: 20px;
       height: 20px;
     }
@@ -31,7 +39,15 @@
     legend {
       width: 100%;
     }
-
+    &.checkbox {
+      justify-content: flex-start;
+      gap: 30px;
+    }
+    &.radio {
+      justify-content: flex-start;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
     
 
    
@@ -46,5 +62,15 @@
   &__item.radio {
     justify-content: flex-start;
     gap: 15px;
+    margin-bottom: 30px;
+  }
+  button {
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    &:hover {
+      cursor: pointer;
+      background-color: white;
+    }
   }
 }
