@@ -7,7 +7,6 @@ import { formSchema } from '../../utils/yupSchema';
 import { useNavigate } from 'react-router-dom';
 import './form.scss';
 
-// todo check types!!!!
 type InputProps = {
   label: Path<DataType>;
   labelName: string;
@@ -28,7 +27,7 @@ const ControlledForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<DataType>({
     mode: 'onChange',
     resolver: yupResolver<DataType>(formSchema),
@@ -36,19 +35,11 @@ const ControlledForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // todo add disabled state to submit button
-  // const [disabledSubmit, setDisabledSubmit] = useState(true);
-  // const checkErrors = () => {
-  //   const hasErrors = !!Object.keys(errors).length;
-  //   setDisabledSubmit();
-  // };
-
   return (
     <>
       <h2>Form with control (RHF)</h2>
       <form
         className="form"
-        // onChange={checkErrors}
         onSubmit={handleSubmit((data) => {
           const reader = new FileReader();
           reader.readAsDataURL(data.file[0]);
@@ -138,7 +129,9 @@ const ControlledForm = () => {
           <p className="form__item_hasError">{errors.file?.message}</p>
         </label>
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={!isDirty || !isValid}>
+          Submit
+        </button>
       </form>
     </>
   );
