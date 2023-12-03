@@ -13,6 +13,7 @@ import {
 } from '../../utils/yupSchema';
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
+import { FormsState } from '../../types';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,6 @@ const UncontrolledForm = () => {
       file: imgRef.current.value,
     };
 
-    // todo all validation with yup
     try {
       const res = await Promise.all([
         await nameSchema.isValid(nameRef.current.value),
@@ -76,7 +76,10 @@ const UncontrolledForm = () => {
       const reader = new FileReader();
       reader.readAsDataURL(imgRef.current.value![0]);
       reader.onloadend = () => {
-        const dataToSave = { ...data, file: reader.result?.toString() };
+        const dataToSave: FormsState = {
+          ...data,
+          file: reader.result?.toString() || '',
+        };
         dispatch(saveData(dataToSave));
         navigate('/');
       };

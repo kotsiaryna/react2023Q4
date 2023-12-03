@@ -8,7 +8,7 @@ type Props = {
 const Card = (props: Props) => {
   const { data } = props;
   if (!data.name) return;
-  const { name, age, email, password1, gender, file } = data;
+  const { name, age, email, password, gender, file } = data;
   return (
     <div className="card">
       <img src={`${file}`} width={300} alt="Preview" />
@@ -16,7 +16,7 @@ const Card = (props: Props) => {
         <li>{`Name: ${name}`}</li>
         <li>{`Age: ${age}`}</li>
         <li>{`Email: ${email}`}</li>
-        <li>{`Password: ${password1}`}</li>
+        <li>{`Password: ${password}`}</li>
         <li>{`Gender: ${gender}`}</li>
         <li>T&C: accepted</li>
       </ul>

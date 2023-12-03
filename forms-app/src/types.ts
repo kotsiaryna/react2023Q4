@@ -1,27 +1,15 @@
-export type UncontrolledFormState = {
-  name?: string;
-  age?: number;
-  email?: string;
-  password?: string;
-  gender?: string;
-  tc?: boolean;
+export type FormsState = {
+  name: string;
+  age: number;
+  email: string;
+  password: string;
+  gender: string;
+  tc: boolean;
   country?: string; //TODO change to list of countries
-  file?: string;
+  file: string;
 };
 
-export type TFormState = {
-  name?: string;
-  age?: number;
-  email?: string;
-  password1?: string;
-  password2?: string;
-  gender?: string;
-  tc?: boolean; // todo boolean in controlled form
-  // country?: string; //TODO change to list of countries
-  file?: string;
-};
-
-export type YupSchemaType = {
+export type DataType = {
   name: string;
   age: number;
   email: string;
@@ -29,10 +17,10 @@ export type YupSchemaType = {
   password2: string;
   gender: string;
   tc: boolean;
-  // country?: string; //TODO change to list of countries
+  country?: string; //TODO change to list of countries
   file: FileList;
 };
 
 export type StateType = {
-  uncontrolled: UncontrolledFormState;
+  form: FormsState[];
 };

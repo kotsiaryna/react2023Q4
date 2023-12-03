@@ -1,5 +1,5 @@
 import { string, number, object, ref, mixed, boolean, ObjectSchema } from 'yup';
-import { YupSchemaType } from '../types';
+import { DataType } from '../types';
 
 export const nameSchema = string()
   .required('Name is required')
@@ -40,7 +40,7 @@ export const imageSchema = mixed<FileList>()
     (value) => value && value[0] && value[0].size <= 4194304
   );
 
-export const formSchema: ObjectSchema<YupSchemaType> = object({
+export const formSchema: ObjectSchema<DataType> = object({
   name: nameSchema,
   age: ageSchema,
   email: emailSchema,

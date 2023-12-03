@@ -1,5 +1,5 @@
 import { Path, UseFormRegister, useForm } from 'react-hook-form';
-import { YupSchemaType } from '../../types';
+import { DataType, FormsState } from '../../types';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { saveData } from '../../redux/formSlice';
@@ -9,9 +9,9 @@ import './form.scss';
 
 // todo check types!!!!
 type InputProps = {
-  label: Path<YupSchemaType>;
+  label: Path<DataType>;
   labelName: string;
-  register: UseFormRegister<YupSchemaType>;
+  register: UseFormRegister<DataType>;
   required: boolean;
 };
 
@@ -29,9 +29,9 @@ const ControlledForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<YupSchemaType>({
+  } = useForm<DataType>({
     mode: 'onChange',
-    resolver: yupResolver<YupSchemaType>(formSchema),
+    resolver: yupResolver<DataType>(formSchema),
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,8 +53,13 @@ const ControlledForm = () => {
           const reader = new FileReader();
           reader.readAsDataURL(data.file[0]);
           reader.onloadend = () => {
-            const imgBase64 = reader.result?.toString();
-            const dataToSave = { ...data, file: imgBase64 };
+            const imgBase64 = reader.result?.toString() || '';
+            const dataToSave: FormsState = {
+              ...data,
+              password: data.password1,
+              file: imgBase64,
+            };
+
             dispatch(saveData(dataToSave));
             navigate('/');
           };
