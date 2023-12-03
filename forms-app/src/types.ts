@@ -23,4 +23,5 @@ export type DataType = {
 
 export type StateType = {
   form: FormsState[];
+  countries: string[];
 };

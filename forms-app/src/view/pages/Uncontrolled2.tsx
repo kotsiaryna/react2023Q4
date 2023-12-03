@@ -1,10 +1,10 @@
-import InputCountry from '../components/InputCountry';
 import { FormEventHandler, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { saveData } from '../../redux/formSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   ageSchema,
+  countrySchema,
   emailSchema,
   imageSchema,
   nameSchema,
@@ -13,12 +13,15 @@ import {
 } from '../../utils/yupSchema';
 import useForceUpdate from '../../utils/updateHook';
 import './form.scss';
-import { FormsState } from '../../types';
+import { FormsState, StateType } from '../../types';
+import AutoComplete from '../components/AutoComplete';
 
 const UncontrolledForm2 = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const forceUpdate = useForceUpdate();
+
+  const countries = useSelector((state: StateType) => state.countries);
 
   const imgRef = useRef<HTMLInputElement>(null);
 
@@ -29,6 +32,7 @@ const UncontrolledForm2 = () => {
   const pass2Error = useRef(false);
   const tcError = useRef(false);
   const imgError = useRef(false);
+  const countryError = useRef(false);
 
   const errors = [
     nameError,
@@ -37,6 +41,7 @@ const UncontrolledForm2 = () => {
     pass1Error,
     tcError,
     imgError,
+    countryError,
     pass2Error,
   ];
 
@@ -50,8 +55,8 @@ const UncontrolledForm2 = () => {
       password: `${formData.get('password1')}`,
       gender: `${formData.get('gender')}`,
       tc: !!formData.get('tc'),
+      country: `${formData.get('country')}`,
     };
-
     try {
       const res = await Promise.all([
         await nameSchema.isValid(data.name),
@@ -60,6 +65,7 @@ const UncontrolledForm2 = () => {
         await passSchema.isValid(data.password),
         await tcAcceptSchema.isValid(data.tc),
         await imageSchema.isValid(imgRef.current?.files),
+        await countrySchema.isValid(data.country),
       ]);
 
       res.forEach((input, i) => {
@@ -147,6 +153,11 @@ const UncontrolledForm2 = () => {
             {pass2Error.current && 'Should match first password'}
           </p>
         </label>
+        <AutoComplete countries={countries} />
+        <p className="form__item_hasError">
+          {countryError.current &&
+            'Country is required and should be one of listed'}
+        </p>
 
         <div className="form__item radio">
           <legend>Gender:</legend>
@@ -183,7 +194,7 @@ const UncontrolledForm2 = () => {
             {imgError.current && 'Required, png or jpeg, max size 4Mb'}
           </p>
         </label>
-        <InputCountry />
+
         <button type="submit">Submit</button>
       </form>
     </>

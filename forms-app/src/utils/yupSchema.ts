@@ -1,5 +1,6 @@
 import { string, number, object, ref, mixed, boolean, ObjectSchema } from 'yup';
 import { DataType } from '../types';
+import countries from '../redux/countries';
 
 export const nameSchema = string()
   .required('Name is required')
@@ -40,6 +41,10 @@ export const imageSchema = mixed<FileList>()
     (value) => value && value[0] && value[0].size <= 4194304
   );
 
+export const countrySchema = string()
+  .required('Country is required')
+  .oneOf(countries, 'Should be one of list');
+
 export const formSchema: ObjectSchema<DataType> = object({
   name: nameSchema,
   age: ageSchema,
@@ -49,4 +54,5 @@ export const formSchema: ObjectSchema<DataType> = object({
   gender: string().required().oneOf(['male', 'female']),
   tc: tcAcceptSchema,
   file: imageSchema,
+  country: countrySchema,
 });
